@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.7.19, for Win64 (x86_64)
 --
--- Host: localhost    Database: brueyent_rise
+-- Host: localhost    Database: ywnlwymy_rise
 -- ------------------------------------------------------
 -- Server version	5.7.19
 
@@ -16,12 +16,12 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Current Database: `brueyent_rise`
+-- Current Database: `ywnlwymy_rise`
 --
 
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `brueyent_rise` /*!40100 DEFAULT CHARACTER SET latin1 */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `ywnlwymy_rise` /*!40100 DEFAULT CHARACTER SET latin1 */;
 
-USE `brueyent_rise`;
+USE `ywnlwymy_rise`;
 
 --
 -- Table structure for table `athlete`

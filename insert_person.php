@@ -9,9 +9,9 @@
 			
 			
 			//CREATE CONNECTION TO MYSQL SERVER =======================================
-			//$con = new mysqli("localhost","brueyent","bAdultWill36!","brueyent_rise");	
-			//$con = new mysqli("localhost:3306","root","wAdultWill35!","brueyent_rise");
-			$con = new mysqli($ini_array['server_name'],$ini_array['user_name'],$ini_array['password'],"brueyent_rise");
+			//$con = new mysqli("localhost","ywnlwymy","bAdultWill35!","ywnlwymy_rise");	
+			//$con = new mysqli("localhost:3306","root","wAdultWill35!","ywnlwymy_rise");
+			$con = new mysqli($ini_array['server_name'],$ini_array['user_name'],$ini_array['password'],"ywnlwymy_rise");
 
 			
 			
