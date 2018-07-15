@@ -1,7 +1,11 @@
 <html>
 	<title>RISE DATABASE 1.0</title>
 	<head>
-		<img src="RiseLogo.jpg" width = 100% />  <!all info is in the img tag "self closing" "/" tag >
+		<h1>-------</h1>
+		<h1 id="bigOne"></h1>
+		<h1>-------</h1>
+		
+		<script src="https://www.gstatic.com/firebasejs/5.2.0/firebase.js"></script>
 		<script>
 		  // Initialize Firebase
 		  var config = {
@@ -15,14 +19,21 @@
 		  firebase.initializeApp(config);
 		  
 		  var bigOne = document.getElementById('bigOne');
-		  var dbRef = firebase.database().reg().child('text');
-		  dbRef.on('value', snap => bigOne.innerText = snap.val());
+		  var dbRef = firebase.database().ref().child('text');
+		  dbRef.on('value', snap => bigOne.innerText=snap.val());
+		  
 		  
 		</script>
+		
+		
+		<img src="RiseLogo.jpg" width = 100% />  <!all info is in the img tag "self closing" "/" tag >
 	<head>
 	
 	<body>
-		<h1>Forms_BRO3</h1>
+		
+		
+		
+		<h1>Forms_BRO4</h1>
 			<a href="create_athlete.php">Create Athlete</a> <br>
 			<a href="create_mentor.php">Create Mentor</a> <br>
 			<a href="create_person.php">Create Person</a>
@@ -31,10 +42,5 @@
 			<a href="show_table.php/?table_name=athlete">All Athletes</a> <br>
 			<a href="show_table.php/?table_name=mentor">All Mentors</a> <br>
 			<a href="show_table.php/?table_name=person">All Persons</a>
-	
-		<h1 id="bigOne"></h1>
-		
-		<script src="https://www.gstatic.com/firebasejs/5.2.0/firebase.js"></script>
-
 	</body>
 </html>
