@@ -40,7 +40,7 @@ ref.set({
 """
 
 ref = db.reference('box001')
-ref.update({'color':'Bruester2'})
+ref.update({'color':'Bruester3'})
 #box_ref = ref.child('box001')
 #box_ref.update({
 #    'color': 'BRUESTER'
