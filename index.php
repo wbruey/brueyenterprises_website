@@ -19,9 +19,10 @@
 		  firebase.initializeApp(config);
 		  
 		  var bigOne = document.getElementById('bigOne');
-		  var dbRef = firebase.database().ref().child('text');
+		  var dbRef = firebase.database().ref().child('box001/color');
 		  dbRef.on('value', snap => bigOne.innerText=snap.val());
 		  
+		  var database = firebase.database();
 		  
 		</script>
 		
@@ -33,7 +34,7 @@
 		
 		
 		
-		<h1>Forms_BRO4</h1>
+		<h1>Forms_BRO6</h1>
 			<a href="create_athlete.php">Create Athlete</a> <br>
 			<a href="create_mentor.php">Create Mentor</a> <br>
 			<a href="create_person.php">Create Person</a>
