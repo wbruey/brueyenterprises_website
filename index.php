@@ -19,10 +19,12 @@
 		  firebase.initializeApp(config);
 		  
 		  var bigOne = document.getElementById('bigOne');
-		  var dbRef = firebase.database().ref().child('box001/color');
-		  dbRef.on('value', snap => bigOne.innerText=snap.val());
+		  var dbRef1 = firebase.database().ref().child('box001/color');
+		  var dbRef2 = firebase.database().ref().child('box001');
+		  dbRef1.on('value', snap => bigOne.innerText=snap.val());
+		  dbRef2.update({'color':'Bruester6'})
 		  
-		  var database = firebase.database();
+
 		  
 		</script>
 		
