@@ -6,6 +6,6 @@
 	
 	<body>
         <a href="rise_sql.php">Rise SQL Database Proof of Concept</a> <br>
-        <a href="rocket_sim.html">Rocket Simulator</a> <br>            
+        <a href="http://www.brueyenterprises.com/dj/polls">Rocket Simulator</a> <br>            
 	</body>
 </html>
