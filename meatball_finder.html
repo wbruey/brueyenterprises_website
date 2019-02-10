@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Meatball's Meatballs</title>
+<script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
+<script>
+  //initalize firebase
+  var config = {
+    apiKey: "AIzaSyB1Nxa4A1ZISBjMgtTdHczNxrnCF7HZP0s",
+    authDomain: "brutest-3228a.firebaseapp.com",
+    databaseURL: "https://brutest-3228a.firebaseio.com",
+    projectId: "brutest-3228a",
+    storageBucket: "brutest-3228a.appspot.com",
+    messagingSenderId: "1099500974553"
+  };
+  firebase.initializeApp(config);
+  var database = firebase.database();
+
+
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(storePosition);
+  } else { 
+    x.innerHTML = "Geolocation is not supported by this browser.";
+  }
+
+  function storePosition(position){
+    firebase.database().ref('/meatball_finder').set({
+      latitude:position.coords.latitude,
+      longitude:position.coords.longitude,
+  });
+  }
+
+
+</script>
+
+
+</head>
+
+
+<body>
+
+<h1>Talkin Meatballs Here</h1>
+
+</body>
+</html>
+
