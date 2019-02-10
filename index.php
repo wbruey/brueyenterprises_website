@@ -7,5 +7,6 @@
 	<body>
         <a href="rise_sql.php">Rise SQL Database Proof of Concept</a> <br>
         <a href="http://www.brueyenterprises.com/dj/polls">Rocket Simulator</a> <br>            
+        <a href="Flight_Hikes.html">Flight Hikes</a><br>
 	</body>
 </html>
