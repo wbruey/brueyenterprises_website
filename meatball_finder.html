@@ -18,7 +18,7 @@
   var database = firebase.database();
 
 
-
+  // first ask a user for their permission to geo locate, if they say yes, continue
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(storePosition);
   } else { 
@@ -32,6 +32,13 @@
   });
   }
 
+  firebase.database().ref('/meatball_finder/').once('value').then(function(snapshot) {
+    var latitude = (snapshot.val() && snapshot.val().latitude) || 'unkown';
+    var longitude = (snapshot.val() && snapshot.val().longitude) || 'unkown';
+    document.getElementById("lat").innerHTML=latitude;
+    document.getElementById("lon").innerHTML=longitude;
+  })
+
 
 </script>
 
@@ -41,8 +48,20 @@
 
 <body>
 
-<h1>Talkin Meatballs Here</h1>
+<body>
 
+<h1>Talkin Meatballs Here</h1>
+<p>I know what you're thinkin...where is the closest meatball shop right now?</p>
+
+<p>Your Current Location</p>
+<p>Latitude</p>
+<p id="lat">40.7106206</p>
+<p>Longitude</p>
+<p id="lon">-74.0087976</p>
+<p>Here is the closest meatball shop to you right now.</p><p>
+
+
+</p></body>
 </body>
 </html>
 
