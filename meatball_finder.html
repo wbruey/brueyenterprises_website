@@ -17,27 +17,44 @@
   firebase.initializeApp(config);
   var database = firebase.database();
 
-
   // first ask a user for their permission to geo locate, if they say yes, continue
   if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(storePosition);
+    // if user syas OK to geo location, then get their position and store it.
+	navigator.geolocation.getCurrentPosition(storePosition);
   } else { 
     x.innerHTML = "Geolocation is not supported by this browser.";
   }
 
+  //store the users position
   function storePosition(position){
-    firebase.database().ref('/meatball_finder').set({
-      latitude:position.coords.latitude,
-      longitude:position.coords.longitude,
-  });
+	//first determine which user number this is.
+	firebase.database().ref('/meatball_finder/').once('value').then(function(snapshot) {
+		//get user count from firebase.
+		user_count = (snapshot.val() && snapshot.val().user_count) || 'unkown';
+		//add one to the user_count.
+		user_count = user_count+1;
+		//publish the user count to webpage and the latitude and longitude.
+		document.getElementById("user_count").innerHTML=user_count;
+		var latitude=position.coords.latitude;
+		var longitude=position.coords.longitude;
+		document.getElementById("lat").innerHTML=latitude;
+		document.getElementById("lon").innerHTML=longitude;
+		
+		//update the user_count to firebase. 
+		var updates ={};
+		updates['/meatball_finder/user_count']=user_count;
+		firebase.database().ref().update(updates);			
+		
+		//write the new lat and lon to the user's spot in the database.
+		var updates ={};
+		updates['/meatball_finder/'+user_count+'/latitude']=latitude;
+		updates['/meatball_finder/'+user_count+'/longitude']=longitude;
+		firebase.database().ref().update(updates);			
+		
+	});
+	
   }
 
-  firebase.database().ref('/meatball_finder/').once('value').then(function(snapshot) {
-    var latitude = (snapshot.val() && snapshot.val().latitude) || 'unkown';
-    var longitude = (snapshot.val() && snapshot.val().longitude) || 'unkown';
-    document.getElementById("lat").innerHTML=latitude;
-    document.getElementById("lon").innerHTML=longitude;
-  })
 
 
 </script>
@@ -52,12 +69,14 @@
 
 <h1>Talkin Meatballs Here</h1>
 <p>I know what you're thinkin...where is the closest meatball shop right now?</p>
-
-<p>Your Current Location</p>
+<p>We've helped a lot of folks find meatballs</p>
+<p id="user_count"></p>
+<p>...to be exact.</p>
+<p>Here is your current location:</p>
 <p>Latitude</p>
-<p id="lat">40.7106206</p>
+<p id="lat"></p>
 <p>Longitude</p>
-<p id="lon">-74.0087976</p>
+<p id="lon"></p>
 <p>Here is the closest meatball shop to you right now.</p><p>
 
 
