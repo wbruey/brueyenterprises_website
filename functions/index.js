@@ -46,6 +46,7 @@ exports.call_yelp = functions.https.onRequest((req, res) => {
 
     const options = {
         url: 'https://api.yelp.com/v3/businesses/search?term=meatballs&latitude='+latitude+'&longitude='+longitude+'&limit=1',
+        //url: 'https://api.yelp.com/v3/businesses/search?term=meatballs&latitude='+latitude+'&longitude='+longitude+'&limit=1&radius=40000',
         method: 'GET',
         headers: {
             'Authorization':'Bearer 8ZenU1STmxat_twXqcd6wQ9IDKMwVv-UPZINBafEv6t1KPkZKoYk3pgqKDyQFDu692Hg1g_fLzmYLTkX3Pp1njdmsbGN883CTg498J3kC7EL7y217To4ShuIEYNfXHYx'
