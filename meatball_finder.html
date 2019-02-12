@@ -68,15 +68,55 @@
 			console.log(the_response);
 		}
         
-        httpGetAsync('https://us-central1-brutest-3228a.cloudfunctions.net/call_yelp?user_count='+user_count,display_response);
+        httpGetAsync('https://us-central1-brutest-3228a.cloudfunctions.net/call_yelp?user_count='+user_count+'&latitude='+latitude+'&longitude='+longitude,display_response);
 
 
         var food_image=firebase.database().ref('/meatball_finder/'+user_count+'/yelp/businesses/0/image_url');
         food_image.on('value',function(snapshot){
-            document.getElementById("food_image").src=snapshot.val();
+            document.getElementById("food_image").src=snapshot.val() || 'https://godshotspot.files.wordpress.com/2014/07/spotlight-battleofgods.jpg';
         });
 
-
+        
+        var restaurant_name=firebase.database().ref('/meatball_finder/'+user_count+'/yelp/businesses/0/name');
+        restaurant_name.on('value',function(snapshot){
+            document.getElementById("restaurant_name").innerHTML='<b>'+snapshot.val()+'</b>';
+        });
+        
+        var distance=firebase.database().ref('/meatball_finder/'+user_count+'/yelp/businesses/0/distance');
+        distance.on('value',function(snapshot){
+            document.getElementById("distance").innerHTML=parseFloat(snapshot.val())/1609.344;
+        });
+        
+        var is_open=firebase.database().ref('/meatball_finder/'+user_count+'/yelp/businesses/0/is_open');
+        is_open.on('value',function(snapshot){
+            document.getElementById("is_open").innerHTML=!snapshot.val();
+        });
+        
+        //var the_link=firebase.database().ref('/meatball_finder/'+user_count+'/yelp/businesses/0/url');
+        //the_link.on('value',function(snapshot){
+        //    console.log(snapshot.val());
+        //    var link_url=
+        //   document.getElementById("the_link").href=(snapshot.val() && snapshot.val().user_count) || 'www.google.com';
+        //});
+        
+        //firebase.database().ref('/meatball_finder/'+user_count+'/yelp/businesses/0/url/').once('value').then(function(snapshot) {
+        //    //var link_url = (snapshot.val() && snapshot.val().url) || 'www.google.com';
+        //    var link_url = snapshot.val() || 'www.google.com';
+        //    console.log(link_url);
+        //    document.getElementById("map_link").href=link_url;
+        //
+        //});
+        
+        
+        var url=firebase.database().ref('/meatball_finder/'+user_count+'/yelp/businesses/0/url');
+        url.on('value',function(snapshot){
+            //var link_url = (snapshot.val() && snapshot.val().url) || 'www.google.com';
+            var link_url = snapshot.val() || 'www.google.com';
+            console.log(link_url);
+            document.getElementById("map_link").href=link_url;
+        
+        });
+        
 	});
 
   }
@@ -105,8 +145,14 @@
 <p id="lat"></p>
 <p>Longitude</p>
 <p id="lon"></p>
-<p>Here is the closest meatball shop to you right now.</p><p>
-<img id="food_image" src="" alt="Hmmmm Meatballs">
+<p>Here is the closest meatball shop to you right now:</p>
+<p id="restaurant_name"> </p>
+<p>But how many miles?</p>
+<p id="distance"></p>
+<p>Open right now tho?</p>
+<p id="is_open"></p><br>
+<a id="map_link" href="www.google.com">Take me there now!</a><br><br><br>
+<img id="food_image" src="https://godshotspot.files.wordpress.com/2014/07/spotlight-battleofgods.jpg" alt="Hmmmm Meatballs">
 
 
 </p></body>
