@@ -69,6 +69,8 @@ exports.call_yelp = functions.https.onRequest((req, res) => {
     
     request(options,record_response);
     res.send();
+    
+    
 
     
     

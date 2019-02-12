@@ -71,15 +71,17 @@
         httpGetAsync('https://us-central1-brutest-3228a.cloudfunctions.net/call_yelp?user_count='+user_count,display_response);
 
 
-        
-        
+        var food_image=firebase.database().ref('/meatball_finder/'+user_count+'/yelp/businesses/0/image_url');
+        food_image.on('value',function(snapshot){
+            document.getElementById("food_image").src=snapshot.val();
+        });
+
+
 	});
-	
+
   }
   
-  
-
-  
+    
   
 
 
@@ -104,6 +106,7 @@
 <p>Longitude</p>
 <p id="lon"></p>
 <p>Here is the closest meatball shop to you right now.</p><p>
+<img id="food_image" src="" alt="Hmmmm Meatballs">
 
 
 </p></body>
