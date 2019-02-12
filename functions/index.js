@@ -38,7 +38,8 @@ exports.update_database = functions.https.onRequest((req, res) => {
 });
 
 exports.call_yelp = functions.https.onRequest((req, res) => {
-
+    
+    const user_count = req.query.user_count;
 
     const options = {
         url: 'https://api.yelp.com/v3/businesses/search?term=meatballs&latitude=40.7106795&longitude=-74.0087278&limit=1',
@@ -57,9 +58,10 @@ exports.call_yelp = functions.https.onRequest((req, res) => {
         
         var updates ={};
         updates['yelp']=JSON.parse(body);
+       
         
         console.log(JSON.parse(body));
-        return admin.database().ref('/test/').update(updates);
+        return admin.database().ref('/meatball_finder/'+user_count+'/').update(updates);
 
         
         

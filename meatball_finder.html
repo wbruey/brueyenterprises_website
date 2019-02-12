@@ -51,8 +51,28 @@
 		updates['/meatball_finder/'+user_count+'/longitude']=longitude;
 		firebase.database().ref().update(updates);			
 		
+        //call the cloud function 
+		function httpGetAsync(theURL,callback)
+        {
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.onreadystatechange = function() { 
+				if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+					callback(xmlHttp.responseText);
+			}
+            xmlHttp.open("GET", theURL, true); // true for asynchronous
+            xmlHttp.send(null);
+            
+        }
 
-		
+		function display_response(the_response){
+			console.log(the_response);
+		}
+        
+        httpGetAsync('https://us-central1-brutest-3228a.cloudfunctions.net/call_yelp?user_count='+user_count,display_response);
+
+
+        
+        
 	});
 	
   }
