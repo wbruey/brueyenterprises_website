@@ -9,8 +9,10 @@
     "logs": "firebase functions:log"
   },
   "dependencies": {
-    "firebase-admin": "~7.0.0",
-    "firebase-functions": "^2.2.0"
+    "firebase-admin": "^7.0.0",
+    "firebase-functions": "^2.2.0",
+    "xmlhttprequest": "^1.8.0",
+    "xhr2": "^0.1.4"
   },
   "private": true
 }
