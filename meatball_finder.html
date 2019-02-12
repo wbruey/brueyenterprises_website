@@ -51,10 +51,34 @@
 		updates['/meatball_finder/'+user_count+'/longitude']=longitude;
 		firebase.database().ref().update(updates);			
 		
+		function httpGetAsync(theUrl, callback)
+		{
+			var xmlHttp = new XMLHttpRequest();
+			xmlHttp.onreadystatechange = function() { 
+				if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+					callback(xmlHttp.responseText);
+			}
+			xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+			xmlHttp.setRequestHeader('Access-Control-Allow-Credentials','true')
+			xmlHttp.setRequestHeader('Authorization','Bearer 8ZenU1STmxat_twXqcd6wQ9IDKMwVv-UPZINBafEv6t1KPkZKoYk3pgqKDyQFDu692Hg1g_fLzmYLTkX3Pp1njdmsbGN883CTg498J3kC7EL7y217To4ShuIEYNfXHYx');
+			xmlHttp.withCredentials=true;
+			xmlHttp.send(null);
+		}
+
+		function display_response(the_response){
+			console.log(the_response);
+		}
+		
+		httpGetAsync('https://api.yelp.com/v3/businesses/search?term=meatballs&latitude=40.7106795&longitude=-74.0087278"&limit=1',display_response);
+		
 	});
 	
   }
+  
+  
 
+  
+  
 
 
 </script>
