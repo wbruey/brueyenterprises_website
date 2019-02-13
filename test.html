@@ -1,30 +1,71 @@
 <!DOCTYPE html>
 <html>
-<body>
+  <head>
+    <title>Place Searches</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
 
-<p>Click the button to get your coordinates.</p>
 
-<button onclick="getLocation()">Try It</button>
+    <script>
+      var map;
+      var service;
+      var infowindow;
 
-<p id="demo"></p>
+      function initMap() {
+        var sydney = new google.maps.LatLng(-33.867, 151.195);
 
-<script>
-var x = document.getElementById("demo");
+        infowindow = new google.maps.InfoWindow();
 
-function getLocation() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(showPosition);
-  } else { 
-    x.innerHTML = "Geolocation is not supported by this browser.";
-  }
-}
+        map = new google.maps.Map(
+            document.getElementById('map'), {center: sydney, zoom: 15});
 
-function showPosition(position) {
-  x.innerHTML = "Latitude: " + position.coords.latitude + 
-  "<br>Longitude: " + position.coords.longitude;
-}
-</script>
+        var request = {
+          query: 'Museum of Contemporary Art Australia',
+          fields: ['name', 'geometry'],
+        };
 
-</body>
+        service = new google.maps.places.PlacesService(map);
+
+        service.findPlaceFromQuery(request, function(results, status) {
+          if (status === google.maps.places.PlacesServiceStatus.OK) {
+            for (var i = 0; i < results.length; i++) {
+              createMarker(results[i]);
+            }
+
+            map.setCenter(results[0].geometry.location);
+          }
+        });
+      }
+
+      function createMarker(place) {
+        var marker = new google.maps.Marker({
+          map: map,
+          position: place.geometry.location
+        });
+
+        google.maps.event.addListener(marker, 'click', function() {
+          infowindow.setContent(place.name);
+          infowindow.open(map, this);
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDp-BQoC9wgo6SGya39L81ab09Nz1flUjk&libraries=places&callback=initMap" async defer></script>
+  </body>
 </html>
 

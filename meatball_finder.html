@@ -85,7 +85,8 @@
         
         var restaurant_name=firebase.database().ref('/meatball_finder/'+user_count+'/yelp/businesses/0/name');
         restaurant_name.on('value',function(snapshot){
-            document.getElementById("restaurant_name").innerHTML='<b>'+snapshot.val()+'</b>';
+			var this_name= snapshot.val() || 'Loading.... give it a minute.  Lots of meatballs to look through'
+            document.getElementById("restaurant_name").innerHTML='<b>'+this_name+'</b>';
         });
         
         var distance=firebase.database().ref('/meatball_finder/'+user_count+'/yelp/businesses/0/distance');
@@ -117,9 +118,10 @@
         var url=firebase.database().ref('/meatball_finder/'+user_count+'/yelp/businesses/0/url');
         url.on('value',function(snapshot){
             //var link_url = (snapshot.val() && snapshot.val().url) || 'www.google.com';
-            var link_url = snapshot.val() || 'www.google.com';
+            var link_url = snapshot.val() || '';
             console.log(link_url);
             document.getElementById("map_link").href=link_url;
+			document.getElementById("map_link").innerHTML=link_url.length>2 ? 'Take Me There, Handsome!' : '';
         
         });
         
@@ -152,12 +154,12 @@
 <p>Longitude</p>
 <p id="lon"></p>
 <p>Here is the closest meatball shop to you right now:</p>
-<p id="restaurant_name"> </p>
+<p id="restaurant_name"> Loading.... give it a minute.  Lots of meatballs to look through  </p>
 <p>But how many miles?</p>
 <p id="distance"></p>
 <p>Open right now tho?</p>
 <p id="is_open"></p><br>
-<a id="map_link" href="www.google.com">Take me there now!</a><br><br><br>
+<a id="map_link" href="www.google.com"></a><br><br><br>
 <img id="food_image" src="https://godshotspot.files.wordpress.com/2014/07/spotlight-battleofgods.jpg" alt="Hmmmm Meatballs">
 
 
