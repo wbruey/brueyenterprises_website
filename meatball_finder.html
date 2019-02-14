@@ -4,7 +4,12 @@
 <head>
   <title>Meatball's Meatballs</title>
 <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
+
 <script>
+  var latitude;
+  var longitude;
+  var this_name;
+  var this_city;
   //initalize firebase
   var config = {
     apiKey: "AIzaSyB1Nxa4A1ZISBjMgtTdHczNxrnCF7HZP0s",
@@ -35,8 +40,8 @@
 		user_count = user_count+1;
 		//publish the user count to webpage and the latitude and longitude.
 		document.getElementById("user_count").innerHTML=user_count;
-		var latitude=position.coords.latitude;
-		var longitude=position.coords.longitude;
+		latitude=position.coords.latitude;
+		longitude=position.coords.longitude;
 		document.getElementById("lat").innerHTML=latitude;
 		document.getElementById("lon").innerHTML=longitude;
 		
@@ -71,8 +76,8 @@
         //var latitude = 33.921477;
         //var longitude = -118.327;
 
-        //var latitude = 40.11563;
-        //var longitude = -76.337;
+        var latitude = 40.11563;
+        var longitude = -76.337;
         
         httpGetAsync('https://us-central1-brutest-3228a.cloudfunctions.net/call_yelp?user_count='+user_count+'&latitude='+latitude+'&longitude='+longitude,display_response);
 
@@ -83,9 +88,9 @@
         });
 
         
-        var restaurant_name=firebase.database().ref('/meatball_finder/'+user_count+'/yelp/businesses/0/name');
+        restaurant_name=firebase.database().ref('/meatball_finder/'+user_count+'/yelp/businesses/0/name');
         restaurant_name.on('value',function(snapshot){
-			var this_name= snapshot.val() || 'Loading.... give it a minute.  Lots of meatballs to look through'
+			this_name= snapshot.val() || 'Loading.... give it a minute.  Lots of meatballs to look through'
             document.getElementById("restaurant_name").innerHTML='<b>'+this_name+'</b>';
         });
         
@@ -97,6 +102,11 @@
         var is_open=firebase.database().ref('/meatball_finder/'+user_count+'/yelp/businesses/0/is_open');
         is_open.on('value',function(snapshot){
             document.getElementById("is_open").innerHTML=!snapshot.val();
+        });
+        
+        var city=firebase.database().ref('/meatball_finder/'+user_count+'/yelp/businesses/0/location/address1');
+        city.on('value',function(snapshot){
+            this_city=snapshot.val() || ''
         });
         
         //var the_link=firebase.database().ref('/meatball_finder/'+user_count+'/yelp/businesses/0/url');
@@ -122,6 +132,9 @@
             console.log(link_url);
             document.getElementById("map_link").href=link_url;
 			document.getElementById("map_link").innerHTML=link_url.length>2 ? 'Take Me There, Handsome!' : '';
+            if(link_url.length>2){
+                wait();
+            }
         
         });
         
@@ -135,13 +148,81 @@
 
 </script>
 
+<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDp-BQoC9wgo6SGya39L81ab09Nz1flUjk&libraries=places&callback=initMap" async defer></script> -->
+
+
+    <script>
+
+
+    
+      function wait(){
+        setTimeout(loadMap,500);
+      }
+      
+      function loadMap() {
+        var script = document.createElement('script');
+        script.src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDp-BQoC9wgo6SGya39L81ab09Nz1flUjk&libraries=places&callback=initMap";
+        document.getElementsByTagName('head')[0].appendChild(script);
+      }
+      var map;
+      var service;
+      var infowindow;
+      
+      
+      
+      function initMap() {
+        var sydney = new google.maps.LatLng(latitude, longitude);
+
+        infowindow = new google.maps.InfoWindow();
+
+        map = new google.maps.Map(
+            document.getElementById('map'), {center: sydney, zoom: 15});
+
+        var request = {
+          //query: restaurant_name,
+          query: this_name + ' ' + this_city,
+          fields: ['name', 'geometry'],
+        };
+
+        console.log(request.query)
+        
+        service = new google.maps.places.PlacesService(map);
+
+        service.findPlaceFromQuery(request, function(results, status) {
+          if (status === google.maps.places.PlacesServiceStatus.OK) {
+            for (var i = 0; i < results.length; i++) {
+              createMarker(results[i]);
+            }
+
+            map.setCenter(results[0].geometry.location);
+          }
+        });
+        
+        
+      }
+
+      function createMarker(place) {
+        var marker = new google.maps.Marker({
+          map: map,
+          position: place.geometry.location
+        });
+
+        google.maps.event.addListener(marker, 'click', function() {
+          infowindow.setContent(place.name);
+          infowindow.open(map, this);
+        });
+      }
+
+
+    </script>
+
 
 </head>
 
 
 <body>
 
-<body>
+
 
 <h1>Talkin Meatballs Here</h1>
 <p>I know what you're thinkin...where is the closest meatball shop right now?</p>
@@ -154,7 +235,7 @@
 <p>Longitude</p>
 <p id="lon"></p>
 <p>Here is the closest meatball shop to you right now:</p>
-<p id="restaurant_name"> Loading.... give it a minute.  Lots of meatballs to look through  </p>
+<p id="restaurant_name"> Loading.... give it a minute.  Lots of meatballs to look through</p>
 <p>But how many miles?</p>
 <p id="distance"></p>
 <p>Open right now tho?</p>
@@ -162,8 +243,8 @@
 <a id="map_link" href="www.google.com"></a><br><br><br>
 <img id="food_image" src="https://godshotspot.files.wordpress.com/2014/07/spotlight-battleofgods.jpg" alt="Hmmmm Meatballs">
 
+<div id="map" style="height: 500px;"></div>
 
-</p></body>
 </body>
 </html>
 
