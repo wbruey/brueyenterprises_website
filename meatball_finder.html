@@ -76,8 +76,8 @@
         //var latitude = 33.921477;
         //var longitude = -118.327;
 
-        var latitude = 40.11563;
-        var longitude = -76.337;
+        //var latitude = 40.11563;
+        //var longitude = -76.337;
         
         httpGetAsync('https://us-central1-brutest-3228a.cloudfunctions.net/call_yelp?user_count='+user_count+'&latitude='+latitude+'&longitude='+longitude,display_response);
 
@@ -90,7 +90,7 @@
         
         restaurant_name=firebase.database().ref('/meatball_finder/'+user_count+'/yelp/businesses/0/name');
         restaurant_name.on('value',function(snapshot){
-			this_name= snapshot.val() || 'Loading.... give it a minute.  Lots of meatballs to look through'
+			this_name= snapshot.val() || 'Loading.... give it a minute.  Lots of meatballs to look through.  Look, im sorry, im a terrible software engineer, the code is inefficient, but i promise it works, just hold tight.  no longer than a minute i promise.  You shouldnt have to refresh, just give it time, meatballs are a comin'
             document.getElementById("restaurant_name").innerHTML='<b>'+this_name+'</b>';
         });
         
@@ -235,7 +235,7 @@
 <p>Longitude</p>
 <p id="lon"></p>
 <p>Here is the closest meatball shop to you right now:</p>
-<p id="restaurant_name"> Loading.... give it a minute.  Lots of meatballs to look through</p>
+<p id="restaurant_name"> Loading.... give it a minute.  Lots of meatballs to look through.  Look, im sorry, im a terrible software engineer, the code is inefficient, but i promise it works, just hold tight.  no longer than a minute i promise.  You shouldnt have to refresh, just give it time, meatballs are a comin</p>
 <p>But how many miles?</p>
 <p id="distance"></p>
 <p>Open right now tho?</p>
