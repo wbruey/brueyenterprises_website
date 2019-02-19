@@ -1,6 +1,9 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const request = require('request');
+const cors = require('cors')({
+  origin: true,
+});
 //global.XMLHttpRequest = require("xhr2");
 admin.initializeApp();
 // // Create and Deploy Your First Cloud Functions
@@ -73,11 +76,48 @@ exports.call_yelp = functions.https.onRequest((req, res) => {
     
     request(options,record_response);
     res.send();
-    
-    
-
-    
+           
     
 });   
 
+exports.call_google_place = functions.https.onRequest((req, res) => {
+    
+	return cors(req,res,() => {
+	
+	const user_count = req.query.user_count;
+    const place_name = req.query.place_name;
+    const place_address = req.query.place_address;
+	var updates ={};
+	
+	uri_search_string= encodeURIComponent(place_name+ ' '+place_address);
+    
+	const options = {
+        url: 'https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input='+uri_search_string+'&inputtype=textquery&fields=place_id,rating&key=AIzaSyDp-BQoC9wgo6SGya39L81ab09Nz1flUjk',
+        //url: 'https://api.yelp.com/v3/businesses/search?term=meatballs&latitude='+latitude+'&longitude='+longitude+'&limit=1&radius=40000',
+        method: 'GET',
+    };
+    
+    console.log(options);
+    
+    function record_response(err,response,body){
+        //console.log(error);
+        //console.log(response);
+        console.log(body);
+        
+        
+        updates['google_place_search']=JSON.parse(body);
+		res.send(updates);
+        
+        console.log(JSON.parse(body));
+        return admin.database().ref('/meatball_finder/'+user_count+'/').update(updates);
+
+		
+        
+    }
+    
+    request(options,record_response);
+	
+    });       
+    
+});   
 

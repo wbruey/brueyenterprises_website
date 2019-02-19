@@ -10,6 +10,7 @@
   var longitude;
   var this_name;
   var this_city;
+  var place_id;
   //initalize firebase
   var config = {
     apiKey: "AIzaSyB1Nxa4A1ZISBjMgtTdHczNxrnCF7HZP0s",
@@ -157,6 +158,7 @@
     
       function wait(){
         setTimeout(loadMap,500);
+		setTimeout(get_place_id,500);
       }
       
       function loadMap() {
@@ -167,6 +169,48 @@
       var map;
       var service;
       var infowindow;
+		
+	  function get_place_id() {
+		console.log(this_name);
+		console.log(this_city);
+		place_id_find_query=this_name + ' ' + this_city;
+		
+		function httpGetAsync(theURL,callback)
+        {
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.onreadystatechange = function() { 
+				if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+					callback(xmlHttp.responseText);
+			}
+            xmlHttp.open("GET", theURL, true); // true for asynchronous
+            xmlHttp.send(null);
+            
+        }
+
+		function display_response(the_response){
+			console.log('the bru');
+			JSON_response=JSON.parse(the_response)
+			console.log(JSON_response);
+			console.log(JSON_response.google_place_search.candidates[0].place_id);
+			place_id=JSON_response.google_place_search.candidates[0].place_id;
+			console.log('the bru');
+			console.log(JSON_response);
+			
+			
+			
+			
+		}
+        
+        //var latitude = 33.921477;
+        //var longitude = -118.327;
+
+        //var latitude = 40.11563;
+        //var longitude = -76.337;
+        
+        httpGetAsync('https://us-central1-brutest-3228a.cloudfunctions.net/call_google_place?user_count='+user_count+'&place_name='+this_name+'&place_address='+this_city,display_response);
+
+		
+	  }
       
       
       
@@ -225,7 +269,7 @@
 
 
 <h1>Talkin Meatballs Here</h1>
-<p>I know what you're thinkin...where is the closest meatball shop right now?</p>
+<p>I know what you're thinkin...Could really go for some meatballs right now, where should i get em?</p>
 <p>We've helped a lot of folks find meatballs</p>
 <p id="user_count"></p>
 <p>...to be exact.</p>
