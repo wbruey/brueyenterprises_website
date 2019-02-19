@@ -142,14 +142,17 @@ exports.call_google_details = functions.https.onRequest((req, res) => {
 		function record_response(err,response,body){
 			//console.log(error);
 			//console.log(response);
-			console.log(body);
+			//console.log(body);
 			updates['reviews']=JSON.parse(body);
 			updates['reviews']['sentiments']=[];
 			updates['reviews']['passions']=[];
 			
 			const client = new language.LanguageServiceClient();
 			
-			var document ={}
+			var document ={};
+			var sentiment;
+			
+			
 			
 			for (i =0; i < updates.reviews.result.reviews.length; i++){
 				text=updates.reviews.result.reviews[i].text;
@@ -161,28 +164,34 @@ exports.call_google_details = functions.https.onRequest((req, res) => {
 				client
 				  .analyzeSentiment({document: document})
 				  .then(results => {
-					const sentiment = results[0].documentSentiment;
+					sentiment = results[0].documentSentiment;
 					updates.reviews.sentiments.push(sentiment.score);
+					console.log(updates.reviews.sentiments);
 					updates.reviews.passions.push(sentiment.magnitude);
 					console.log(`Text: ${text}`);
 					console.log(`Sentiment score: ${sentiment.score}`);
 					console.log(`Sentiment magnitude: ${sentiment.magnitude}`);
-					
+						
+					if (i==updates.reviews.result.reviews.length-1){
+						res.send(updates);
+						return admin.database().ref('/meatball_finder/'+user_count+'/google_place_details/').update(updates);
+					}
 					
 				  })
 				  .catch(err => {
 					console.error('ERROR:', err);
 				  });
+				  
 				
 			}
 			
 		
 			
-			res.send(updates);
 			
 			
-			console.log(JSON.parse(body));
-			return admin.database().ref('/meatball_finder/'+user_count+'/google_place_details/').update(updates);
+			
+			//console.log(JSON.parse(body));
+			
 
 			
 			
