@@ -121,3 +121,41 @@ exports.call_google_place = functions.https.onRequest((req, res) => {
     
 });   
 
+exports.call_google_details = functions.https.onRequest((req, res) => {
+    
+	return cors(req,res,() => {
+		
+		const place_id = req.query.place_id;
+		var updates ={};
+		
+		
+		
+		const options = {
+			url: 'https://maps.googleapis.com/maps/api/place/details/json?placeid='+place_id+'&fields=reviews,rating&key=AIzaSyDp-BQoC9wgo6SGya39L81ab09Nz1flUjk',
+			//url: 'https://api.yelp.com/v3/businesses/search?term=meatballs&latitude='+latitude+'&longitude='+longitude+'&limit=1&radius=40000',
+			method: 'GET',
+		};
+		
+		console.log(options);
+		
+		function record_response(err,response,body){
+			//console.log(error);
+			//console.log(response);
+			console.log(body);
+			
+			
+			updates['reviews']=JSON.parse(body);
+			res.send(updates);
+			
+			console.log(JSON.parse(body));
+			return admin.database().ref('/meatball_finder/'+user_count+'/google_place_details/').update(updates);
+
+			
+			
+		}
+		
+		request(options,record_response);
+	
+    });       
+    
+});   

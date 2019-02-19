@@ -158,8 +158,38 @@
     
       function wait(){
         setTimeout(loadMap,500);
-		setTimeout(get_place_id,500);
+		setTimeout(get_place_id(get_place_details),500);
       }
+	  
+	  function get_place_details(the_place_id){
+		console.log(the_place_id);
+		function httpGetAsync(theURL,callback)
+        {
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.onreadystatechange = function() { 
+				if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+					callback(xmlHttp.responseText);
+			}
+            xmlHttp.open("GET", theURL, true); // true for asynchronous
+            xmlHttp.send(null);
+            
+        }
+		function display_response(the_response){
+			console.log('the bru2');
+			JSON_response=JSON.parse(the_response)
+			console.log(JSON_response);
+			console.log(JSON_response.reviews.result.reviews.length);
+			
+			//console.log(JSON_response.google_place_search.candidates[0].place_id);
+			//place_id=JSON_response.google_place_search.candidates[0].place_id;
+			console.log('the bru2');
+			
+			
+		}
+	
+		httpGetAsync('https://us-central1-brutest-3228a.cloudfunctions.net/call_google_details?place_id='+the_place_id,display_response);
+	
+	  }
       
       function loadMap() {
         var script = document.createElement('script');
@@ -170,7 +200,7 @@
       var service;
       var infowindow;
 		
-	  function get_place_id() {
+	  function get_place_id(outter_callback) {
 		console.log(this_name);
 		console.log(this_city);
 		place_id_find_query=this_name + ' ' + this_city;
@@ -194,9 +224,8 @@
 			console.log(JSON_response.google_place_search.candidates[0].place_id);
 			place_id=JSON_response.google_place_search.candidates[0].place_id;
 			console.log('the bru');
-			console.log(JSON_response);
-			
-			
+			console.log(place_id);
+			outter_callback(place_id);
 			
 			
 		}
@@ -209,7 +238,6 @@
         
         httpGetAsync('https://us-central1-brutest-3228a.cloudfunctions.net/call_google_place?user_count='+user_count+'&place_name='+this_name+'&place_address='+this_city,display_response);
 
-		
 	  }
       
       
