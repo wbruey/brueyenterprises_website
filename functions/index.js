@@ -1,6 +1,7 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const request = require('request');
+const language = require('@google-cloud/language');
 const cors = require('cors')({
   origin: true,
 });
@@ -127,7 +128,7 @@ exports.call_google_details = functions.https.onRequest((req, res) => {
 		
 		const place_id = req.query.place_id;
 		var updates ={};
-		
+		const user_count = req.query.user_count;
 		
 		
 		const options = {
@@ -142,10 +143,43 @@ exports.call_google_details = functions.https.onRequest((req, res) => {
 			//console.log(error);
 			//console.log(response);
 			console.log(body);
-			
-			
 			updates['reviews']=JSON.parse(body);
+			updates['reviews']['sentiments']=[];
+			updates['reviews']['passions']=[];
+			
+			const client = new language.LanguageServiceClient();
+			
+			var document ={}
+			
+			for (i =0; i < updates.reviews.result.reviews.length; i++){
+				text=updates.reviews.result.reviews[i].text;
+				var document = {
+				  content: text,
+				  type: 'PLAIN_TEXT',
+				};
+				
+				client
+				  .analyzeSentiment({document: document})
+				  .then(results => {
+					const sentiment = results[0].documentSentiment;
+					updates.reviews.sentiments.push(sentiment.score);
+					updates.reviews.passions.push(sentiment.magnitude);
+					console.log(`Text: ${text}`);
+					console.log(`Sentiment score: ${sentiment.score}`);
+					console.log(`Sentiment magnitude: ${sentiment.magnitude}`);
+					
+					
+				  })
+				  .catch(err => {
+					console.error('ERROR:', err);
+				  });
+				
+			}
+			
+		
+			
 			res.send(updates);
+			
 			
 			console.log(JSON.parse(body));
 			return admin.database().ref('/meatball_finder/'+user_count+'/google_place_details/').update(updates);
