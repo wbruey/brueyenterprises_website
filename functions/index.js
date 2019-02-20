@@ -130,7 +130,7 @@ exports.call_google_details = functions.https.onRequest((req, res) => {
 		
 		const place_id = req.query.place_id;
 		var updates ={};
-		const user_count = req.query.user_count;
+		
 		
 		
 		const options = {
@@ -144,56 +144,14 @@ exports.call_google_details = functions.https.onRequest((req, res) => {
 		function record_response(err,response,body){
 			//console.log(error);
 			//console.log(response);
-			//console.log(body);
+			console.log(body);
+			
+			
 			updates['reviews']=JSON.parse(body);
-			updates['reviews']['sentiments']=[];
-			updates['reviews']['passions']=[];
+			res.send(updates);
 			
-			const client = new language.LanguageServiceClient();
-			
-			var document ={};
-			var sentiment;
-			
-			
-			
-			for (i =0; i < updates.reviews.result.reviews.length; i++){
-				text=updates.reviews.result.reviews[i].text;
-				var document = {
-				  content: text,
-				  type: 'PLAIN_TEXT',
-				};
-				
-				client
-				  .analyzeSentiment({document: document})
-				  .then(results => {
-					sentiment = results[0].documentSentiment;
-					updates.reviews.sentiments.push(sentiment.score);
-					console.log(updates.reviews.sentiments);
-					updates.reviews.passions.push(sentiment.magnitude);
-					console.log(`Text: ${text}`);
-					console.log(`Sentiment score: ${sentiment.score}`);
-					console.log(`Sentiment magnitude: ${sentiment.magnitude}`);
-						
-					if (i==updates.reviews.result.reviews.length-1){
-						res.send(updates);
-						return admin.database().ref('/meatball_finder/'+user_count+'/google_place_details/').update(updates);
-					}
-					
-				  })
-				  .catch(err => {
-					console.error('ERROR:', err);
-				  });
-				  
-				
-			}
-			
-		
-			
-			
-			
-			
-			//console.log(JSON.parse(body));
-			
+			console.log(JSON.parse(body));
+			return admin.database().ref('/meatball_finder/'+user_count+'/google_place_details/').update(updates);
 
 			
 			
