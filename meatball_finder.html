@@ -11,7 +11,12 @@
   var this_name;
   var this_city;
   var place_id;
-  //initalize firebase
+  var review_json;
+  var texts='';
+  var feelings=[];
+  var passions=[];
+  var sentiment_JSON;
+//initalize firebase
   var config = {
     apiKey: "AIzaSyB1Nxa4A1ZISBjMgtTdHczNxrnCF7HZP0s",
     authDomain: "brutest-3228a.firebaseapp.com",
@@ -161,7 +166,13 @@
 		setTimeout(get_place_id(get_place_details),500);
       }
 	  
-	  function get_place_details(the_place_id){
+	  
+      
+
+      
+      
+      
+      function get_place_details(the_place_id){
 		console.log(the_place_id);
 		function httpGetAsync(theURL,callback)
         {
@@ -176,19 +187,56 @@
         }
 		function display_response(the_response){
 			console.log('the bru2');
-			JSON_response=JSON.parse(the_response)
-			console.log(JSON_response);
-			console.log(JSON_response.reviews.result.reviews.length);
+			review_json=JSON.parse(the_response);
+			console.log(review_json);
+			console.log(review_json.reviews.result.reviews.length);
 			
-			//console.log(JSON_response.google_place_search.candidates[0].place_id);
-			//place_id=JSON_response.google_place_search.candidates[0].place_id;
+			//console.log(review_json.google_place_search.candidates[0].place_id);
+			//place_id=review_json.google_place_search.candidates[0].place_id;
 			console.log('the bru2');
-			
-			
+            
+
+            for(i=0;i<review_json.reviews.result.reviews.length;i++){
+                texts=texts+review_json.reviews.result.reviews[i].text+' ';
+            }
+            console.log(texts)
+            const uri_sentiment_concatination = encodeURIComponent(texts)
+            var xmlHttp = new XMLHttpRequest();      
+            xmlHttp.onreadystatechange = function() { 
+                if (xmlHttp.readyState == 4 && xmlHttp.status == 200){
+                    sentiment_JSON=JSON.parse(xmlHttp.responseText);
+                    console.log(sentiment_JSON);
+                    document.getElementById("summary").innerHTML='Overall, this place has a sentimate score of '+ sentiment_JSON.score.toString() + '.  Anything below -0.25 is negatvie, between -0.25 and 0.25 is nuetral, and above 0.25 is positive.  Below, you can find each sentence from the top 5 most relevent reviews along with their individual sentiment (green for good, red for bad, black for nuetral)'  ;
+                    
+                    
+                    for(i=0;i<sentiment_JSON.scores.length ;i++){
+                        var div = document.createElement("div"+i.toString());
+                        div.innerHTML=sentiment_JSON.sentences[i]+' ';
+                        if (sentiment_JSON.scores[i] > 0){
+                            div.style.color = "green"
+                        }
+                        if (sentiment_JSON.scores[i] < 0){
+                            div.style.color = "red"
+                        }
+                        document.getElementById("div_review").appendChild(div);
+                        
+                    
+                    }
+                    
+                }    
+            }
+            xmlHttp.open("GET",'https://us-central1-brutest-3228a.cloudfunctions.net/call_google_sentiment?text='+uri_sentiment_concatination , true); // true for asynchronous
+            xmlHttp.send(null);
+            
+            
+            
 		}
-	
+        
 		httpGetAsync('https://us-central1-brutest-3228a.cloudfunctions.net/call_google_details?place_id='+the_place_id,display_response);
-	
+        
+        
+        
+        
 	  }
       
       function loadMap() {
@@ -316,6 +364,8 @@
 <img id="food_image" src="https://godshotspot.files.wordpress.com/2014/07/spotlight-battleofgods.jpg" alt="Hmmmm Meatballs">
 
 <div id="map" style="height: 500px;"></div>
+<p id="summary"></p>
+<div id="div_review"></div>
 
 </body>
 </html>

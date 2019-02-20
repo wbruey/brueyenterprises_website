@@ -1,6 +1,7 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const request = require('request');
+const language = require('@google-cloud/language');
 const cors = require('cors')({
   origin: true,
 });
@@ -32,6 +33,8 @@ exports.update_database = functions.https.onRequest((req, res) => {
   // Grab the text parameter.
   const path = req.query.path;
   const data = req.query.data;
+  var sentiment;
+  var sentences;
   // Push the new message into the Realtime Database using the Firebase Admin SDK.
   var updates = {};
   updates[path]=data;
@@ -158,4 +161,39 @@ exports.call_google_details = functions.https.onRequest((req, res) => {
 	
     });       
     
+});   
+
+exports.call_google_sentiment = functions.https.onRequest((req, res) => {
+    return cors(req,res,() => {
+        const text = req.query.text;
+        const client = new language.LanguageServiceClient();
+
+        const document = {
+          content: text,
+          type: 'PLAIN_TEXT',
+        };
+        client
+          .analyzeSentiment({document: document})
+          .then(results => {
+            sentiment = results[0].documentSentiment;
+            sentiment['scores']=[];
+            sentiment['passions']=[];
+            sentiment['sentences']=[];
+            console.log(`Document sentiment:`);
+            console.log(`  Score: ${sentiment.score}`);
+            console.log(`  Magnitude: ${sentiment.magnitude}`);
+            
+            sentences = results[0].sentences;
+            sentences.forEach(sentence => {
+                sentiment.scores.push(sentence.sentiment.score);
+                sentiment.passions.push(sentence.sentiment.magnitude);
+                sentiment.sentences.push(sentence.text.content);
+            });
+
+            res.send(sentiment);
+          })
+          .catch(err => {
+            console.error('ERROR:', err);
+          });
+    });  
 });   
