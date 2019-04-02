@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>SMS Paper</title>
+</head>
+
+
+<style>
+#customers {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#customers td, #customers th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#customers tr:nth-child(even){background-color: #f2f2f2;}
+
+#customers tr:hover {background-color: #ddd;}
+
+#customers th {
+  padding-top: 12px;
+  padding-bottom: 12px;a
+  text-align: left;
+  background-color: #4CAF50;
+  color: white;
+}
+</style>
+
+
+<script src="https://www.gstatic.com/firebasejs/5.9.2/firebase.js"></script>
+
+<script>
+
+function getQueryVariable(variable)
+{
+       var query = window.location.search.substring(1);
+       var vars = query.split("&");
+       for (var i=0;i<vars.length;i++) {
+               var pair = vars[i].split("=");
+               if(pair[0] == variable){return pair[1];}
+       }
+       return(false);
+}
+
+
+
+var config = {
+	apiKey: "AIzaSyAi9aZghTwd67Kimq3MztjXhxg2koxLONo",
+	authDomain: "brutest2-62192.firebaseapp.com",
+	databaseURL: "https://brutest2-62192.firebaseio.com",
+	projectId: "brutest2-62192",
+	storageBucket: "brutest2-62192.appspot.com",
+	messagingSenderId: "195038075600"
+};
+
+
+firebase.initializeApp(config);
+
+
+function addRow(message,time) {
+  var table = document.getElementById("customers");
+  var row = table.insertRow(1);
+  var cell1 = row.insertCell(0);
+  var cell2 = row.insertCell(1);
+  cell1.innerHTML = message;
+  cell2.innerHTML = time;
+}
+
+
+
+function getPhoneNumber(unique_id,callback){
+firebase.database().ref('/unique_ids/'+unique_id+'/phone/').once('value').then(function(snapshot) {
+    phone_number=snapshot.val();
+    console.log(phone_number);
+    callback(phone_number);
+    
+});
+    
+}
+
+
+
+function displayEntries(phone_number){
+    firebase.database().ref('/users/'+phone_number+'/messages/').once('value').then(function(snapshot) {
+        console.log(snapshot.val());
+      
+        var messages=snapshot.val();
+        for(var message in messages){
+            if (messages[message].hasOwnProperty('original')){
+                if (messages[message]['original'].hasOwnProperty('Body')){
+                    console.log(messages[message]['original']['Body']);
+                    addRow(messages[message]['original']['Body'],messages[message]['original']['time']);
+                    
+                    
+                }
+            
+            }
+        }
+        
+
+    });
+}
+
+var unique_id=getQueryVariable('unique_id');
+console.log(unique_id);
+getPhoneNumber(unique_id,displayEntries);
+
+//HTTP CALL GET
+//function httpGetAsync(theURL,callback)
+//{
+//	var xmlHttp = new XMLHttpRequest();
+//	xmlHttp.onreadystatechange = function() { 
+//		if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+//			callback(xmlHttp.responseText);
+//	}
+//	xmlHttp.open("GET", theURL, true); // true for asynchronous
+//	xmlHttp.send(null);
+//	
+//}
+
+//HTTP CALL POST
+//function httpGetAsyncPost(theURL,data,callback)
+//{
+//	var xmlHttp = new XMLHttpRequest();
+//	xmlHttp.open("POST", theURL, true); // true for asynchronous
+//	xmlHttp.setRequestHeader("Content-Type", "application/json");
+//	xmlHttp.onreadystatechange = function() { 
+//		if (xmlHttp.readyState == 4 && xmlHttp.status == 200){
+//			//callback(xmlHttp.responseText);
+//		}
+//	}
+//	console.log(data);
+//	
+//	xmlHttp.send(data);
+//}
+
+//httpGetAsync('https://us-central1-brutest2-62192.cloudfunctions.net/addMessage?text=brubru');
+//var message_URL='https://us-central1-brutest2-62192.cloudfunctions.net/addMessagePost';
+//var data=JSON.stringify({"message":"this is the bruester"});
+//console.log(message_URL);
+//console.log(data);
+//httpGetAsyncPost(message_URL,data)
+
+
+
+</script>
+
+
+<body>
+<h1>SMS Paper</h1>
+
+
+<table id="customers">
+  <tr>
+    <th>Your Writing</th>
+    <th width="250">Time (UTC)</th>
+  </tr>
+</table>
+
+</body>
+
+

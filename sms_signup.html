@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {font-family: Arial, Helvetica, sans-serif;}
+* {box-sizing: border-box;}
+
+input[type=text], select, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  resize: vertical;
+}
+
+input[type=submit] {
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+  background-color: #45a049;
+}
+
+.container {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+}
+</style>
+</head>
+
+<script>
+//&& String(document.getElementById("phone_number")).length==10
+function from_submit() {
+    var string_phone=String(document.getElementById("phone_number").value);
+    if(!isNaN(String(document.getElementById("phone_number").value)) && string_phone.length==10 ) {
+        alert('Submitted.  Intro text sent to ' + String(document.getElementById("phone_number").value) );
+        document.getElementById("phone_number").value='Submitted';
+        httpGetAsync('https://us-central1-brutest2-62192.cloudfunctions.net/inviteFriend?phone='+string_phone);
+        return false;
+    } else {
+        alert('Invalid Phone Number - 10 digits, no spaces, just numbers.  Example: 7172034390');
+        document.getElementById("phone_number").value='';
+        return false;
+    }
+    
+}
+    //HTTP CALL GET
+function httpGetAsync(theURL,callback)
+{
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() { 
+		if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+			callback(xmlHttp.responseText);
+	}
+	xmlHttp.open("GET", theURL, true); // true for asynchronous
+	xmlHttp.send(null);
+	
+}
+
+</script>
+
+<body>
+
+<h3>Get Your Own SMS Paper</h3>
+<div class="container">
+    <form onsubmit="return from_submit();" class="my-form">
+        <label for="phone_number">Phone Number</label>
+        <input type="text" id="phone_number" name="phone_number" placeholder="Example: 7172034390     10 digits, just numbers, no sapces">
+    <input type="submit" value="Submit">
+    </form>
+</div>
+
+</body>
+</html>
