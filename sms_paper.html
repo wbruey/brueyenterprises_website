@@ -5,7 +5,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <title>SMS Paper</title>
 <div id="pad_binding" class="bind_container">
-<h2 id="stat"><center>SMS Paper - Initializing</center></h2>
+<h1 id="stat"><center>SMS Paper - Initializing</center></h1>
 </div>
 </head>
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -47,59 +47,17 @@
   color: white;
 }
 
-body {
-  margin: 0 auto;
-  max-width: 800px;
-  padding: 0 20px;
-}
-
-.container {
-  border: 2px solid #dedede;
-  background-color: #f1f1f1;
-  border-radius: 5px;
-  padding: 10px;
-  margin: 10px 0;
-}
 
 .darker {
   border-color: #ccc;
   background-color: #ddd;
 }
 
-.container::after {
-  content: "";
-  clear: both;
-  display: table;
-}
-
-.container img {
-  float: left;
-  max-width: 60px;
-  width: 100%;
-  margin-right: 20px;
-  border-radius: 50%;
-}
-
-.container img.right {
-  float: right;
-  margin-left: 20px;
-  margin-right:0;
-}
-
-.time-right {
-  float: right;
-  color: #aaa;
-}
-
-.time-left {
-  float: left;
-  color: #999;
-}
 
 body {
   margin: 0 auto;
   max-width: 1000px;
-  padding: 0 20px;
+  padding: 20px;
 }
 
 .container {
@@ -110,17 +68,46 @@ body {
   padding-left: 10px;
   padding-right: 10px;
   margin: 10px 0;
+  font-size: 1.5em;
+  
 }
 .pad_container {
-  float: left;
-  width: 800px;
+ 
+  padding:2px;
+  width:80%;
+  float:left;
+  
 }
+
+.body_container{
+	width:100%;
+}
+
+.hash_container {
+    min-width:18%;
+	float: right;
+	padding:2px;
+	text-align: center;
+	font-size: 2em;
+}
+
+.hash_link_container{
+  border: 2px solid #1D4288;
+  background-color: #FBF2BC;
+  border-radius: 15px;
+  padding-top: 75px;
+  padding-bottom: 75px;
+  margin: 10px;
+  
+	
+}
+
 .bind_container {
   border: 2px solid #1D4288;
   background-color: #1D4288;
   color: #FFFFFF ;
   border-radius: 0px;
-  padding: 0px;
+  padding: 10px;
   margin: 2px 0;
   border-radius: 5px;
   font-weight: normal;
@@ -128,10 +115,6 @@ body {
  
 }
 
-.darker {
-  border-color: #ccc;
-  background-color: #ddd;
-}
 
 .container::after {
   content: "";
@@ -151,6 +134,13 @@ body {
   float: right;
   margin-left: 20px;
   margin-right:0;
+}
+
+.phone-right {
+  font-size: 1em;
+  color: #FFFFFF;
+  font-family: "Courier" ;
+  padding-left:35%;
 }
 
 .time-right {
@@ -169,8 +159,14 @@ body {
 
 <body>
 
+<div id="body_div" class="body_container">
+	
+	<div id="writings" class="pad_container"></div>
+	<div id="hashtags" class="hash_container"></div>
 
-<div id="writings" class="pad_container"></div>
+</div>
+
+
 
 
 
@@ -225,18 +221,19 @@ firebase.initializeApp(config);
 
 var message_number=1;
 function addRow(message,time) {
-
-  
-  var div = document.createElement('div');
-  
   $('#writings').prepend('<div id="writing'+message_number+'" class="container"></div>');
-  $('#writing'+message_number).prepend('<p>'+message+'</p>');
+  $('#writing'+message_number).append('<p>'+message+'</p>');
   $('#writing'+message_number).append('<span class="time-right">'+time+'</span>');
-  message_number=message_number+1;
-  
-  
+  message_number=message_number+1;  
 }
 
+var hashtag_number=1;
+function addHashtag(hashtag,url) {
+  var no_hash_tag=hashtag.substring(1);
+  $('#hashtags').prepend('<div id="hashtag'+hashtag_number+'" class="hash_link_container"></div>');
+  $('#hashtag'+hashtag_number).append('<a href='+url+'&hashtag='+no_hash_tag+'>'+hashtag+'</a>');
+  hashtag_number=hashtag_number+1;
+}
 
 
 function getPhoneNumber(unique_id,callback){
@@ -259,28 +256,71 @@ function getPhoneNumber(unique_id,callback){
 function displayEntries(phone_number){
     var stat = document.getElementById("stat");
 	stat.innerHTML='SMS Paper - Found Phone Number Match, Downloading Writings';
-	firebase.database().ref('/users/'+phone_number+'/messages/').once('value').then(function(snapshot) {
-        console.log(snapshot.val());
-		stat.innerHTML='SMS Paper - Writings Downloaded, Populating Table';
-        var messages=snapshot.val();
-        for(var message in messages){
-            if (messages[message].hasOwnProperty('original')){
-                if (messages[message]['original'].hasOwnProperty('Body')){
-                    console.log(messages[message]['original']['Body']);
-                    addRow(messages[message]['original']['Body'],messages[message]['original']['time']);
-                    
-                    
-                }
-            
-            }
-        }
-        
-	stat.innerHTML='<center>SMS Paper - Your Personal Paper, Always Within Reach.</center>';
-    });
 	
+	//IF there is a hashtag in the url, display hashtags, otherwise all.
+	if(url_hashtag){
+		firebase.database().ref('/users/'+phone_number+'/hashtags/'+url_hashtag).once('value').then(function(snapshot) {
+			var messages=snapshot.val();
+			for(var message in messages){
+				if (messages[message].hasOwnProperty('original')){
+					if (messages[message]['original'].hasOwnProperty('Body')){
+						console.log(messages[message]['original']['Body']);
+						addRow(messages[message]['original']['Body'],messages[message]['original']['time']);
+						
+						
+					}
+				
+				}
+			}
+			stat.innerHTML='<center>SMS Paper - Your Personal Paper, Always Within Reach.</center><span class="phone-right">'+clean_phone_number+'</span>';
+		});
+	}else{
+		firebase.database().ref('/users/'+phone_number+'/messages/').once('value').then(function(snapshot) {
+			console.log(snapshot.val());
+			stat.innerHTML='SMS Paper - Writings Downloaded, Populating Table';
+			var messages=snapshot.val();
+			for(var message in messages){
+				if (messages[message].hasOwnProperty('original')){
+					if (messages[message]['original'].hasOwnProperty('Body')){
+						console.log(messages[message]['original']['Body']);
+						addRow(messages[message]['original']['Body'],messages[message]['original']['time']);
+						
+						
+					}
+				
+				}
+			}
+			stat.innerHTML='<center>SMS Paper - Your Personal Paper, Always Within Reach.</center><span class="phone-right">'+clean_phone_number+'</span>';
+		});
+	}		
+    
+	
+	
+	
+	
+	
+	
+	clean_phone_number=phone_number.substring(2);
+	clean_phone_number='('+clean_phone_number.substring(0,3)+')'+clean_phone_number.substring(3,6)+'-'+clean_phone_number.substring(6,10);
+	
+	//create hashtag menu
+	
+	
+
+
+	firebase.database().ref('/users/'+phone_number+'/hashtags_list/').once('value').then(function(snapshot) {
+		var url = 'https://www.brueyenterprises.com/sms_paper_test.html?unique_id='+unique_id;
+		var hashtags=snapshot.val();
+		for (var hashtag in hashtags){
+			console.log(hashtags[hashtag]);
+			addHashtag(hashtags[hashtag],url);
+		}
+	});
 }
 
 var unique_id=getQueryVariable('unique_id');
+var url_hashtag=getQueryVariable('hashtag');
+console.log(url_hashtag);
 console.log(unique_id);
 getPhoneNumber(unique_id,displayEntries);
 
@@ -323,9 +363,12 @@ getPhoneNumber(unique_id,displayEntries);
 
 deleteAllCookies();
 </script>
-
-
 </body>
+
+<style>
+
+</style>
+
 
 <script>
 function deleteAllCookies() {
@@ -341,5 +384,6 @@ function deleteAllCookies() {
 
 deleteAllCookies();
 </script>
+
 
 
