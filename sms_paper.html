@@ -2,7 +2,11 @@
 <html>
 
 <head>
-  <title>SMS Paper</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<title>SMS Paper</title>
+<div id="pad_binding" class="bind_container">
+<h2 id="stat"><center>SMS Paper - Initializing</center></h2>
+</div>
 </head>
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -42,21 +46,132 @@
   background-color: #4CAF50;
   color: white;
 }
+
+body {
+  margin: 0 auto;
+  max-width: 800px;
+  padding: 0 20px;
+}
+
+.container {
+  border: 2px solid #dedede;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.darker {
+  border-color: #ccc;
+  background-color: #ddd;
+}
+
+.container::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.container img {
+  float: left;
+  max-width: 60px;
+  width: 100%;
+  margin-right: 20px;
+  border-radius: 50%;
+}
+
+.container img.right {
+  float: right;
+  margin-left: 20px;
+  margin-right:0;
+}
+
+.time-right {
+  float: right;
+  color: #aaa;
+}
+
+.time-left {
+  float: left;
+  color: #999;
+}
+
+body {
+  margin: 0 auto;
+  max-width: 1000px;
+  padding: 0 20px;
+}
+
+.container {
+  border: 2px solid #1D4288;
+  background-color: #FBF2BC;
+  border-radius: 15px;
+  padding: 0px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin: 10px 0;
+}
+.pad_container {
+  float: left;
+  width: 800px;
+}
+.bind_container {
+  border: 2px solid #1D4288;
+  background-color: #1D4288;
+  color: #FFFFFF ;
+  border-radius: 0px;
+  padding: 0px;
+  margin: 2px 0;
+  border-radius: 5px;
+  font-weight: normal;
+  font-family: "Century" ;
+ 
+}
+
+.darker {
+  border-color: #ccc;
+  background-color: #ddd;
+}
+
+.container::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.container img {
+  float: left;
+  max-width: 60px;
+  width: 100%;
+  margin-right: 20px;
+  border-radius: 50%;
+}
+
+.container img.right {
+  float: right;
+  margin-left: 20px;
+  margin-right:0;
+}
+
+.time-right {
+  float: right;
+  color: #5B5B5B;
+  font-family: "Courier" ;
+}
+
+.time-left {
+  float: left;
+  color: #999;
+}
 </style>
 
 
 
 <body>
-<h1 id="stat">SMS Paper - Initializing</h1>
 
 
+<div id="writings" class="pad_container"></div>
 
-<table id="customers">
-  <tr>
-    <th>Your Writing</th>
-    <th width="250">Time (UTC)</th>
-  </tr>
-</table>
 
 
 <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase.js"></script>
@@ -108,14 +223,18 @@ var config = {
 
 firebase.initializeApp(config);
 
-
+var message_number=1;
 function addRow(message,time) {
-  var table = document.getElementById("customers");
-  var row = table.insertRow(1);
-  var cell1 = row.insertCell(0);
-  var cell2 = row.insertCell(1);
-  cell1.innerHTML = message;
-  cell2.innerHTML = time;
+
+  
+  var div = document.createElement('div');
+  
+  $('#writings').prepend('<div id="writing'+message_number+'" class="container"></div>');
+  $('#writing'+message_number).prepend('<p>'+message+'</p>');
+  $('#writing'+message_number).append('<span class="time-right">'+time+'</span>');
+  message_number=message_number+1;
+  
+  
 }
 
 
@@ -156,7 +275,7 @@ function displayEntries(phone_number){
             }
         }
         
-	stat.innerHTML='SMS Paper 2 - Your Personal Paper, Always Within Reach.';
+	stat.innerHTML='<center>SMS Paper - Your Personal Paper, Always Within Reach.</center>';
     });
 	
 }
@@ -202,10 +321,25 @@ getPhoneNumber(unique_id,displayEntries);
 //httpGetAsyncPost(message_URL,data)
 
 
-
+deleteAllCookies();
 </script>
 
 
 </body>
+
+<script>
+function deleteAllCookies() {
+    var cookies = document.cookie.split(";");
+
+    for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i];
+        var eqPos = cookie.indexOf("=");
+        var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+        document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    }
+}
+
+deleteAllCookies();
+</script>
 
 

@@ -4,9 +4,16 @@
 <script>
 
 console.log('hello')
-x=Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+var x=Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
 console.log(x)
+
+var y = 'hey it is #me whats #up #fest4345r.].]#$%^&*(45 yo yo yo';
+console.log(y);
+
+console.log(y.match(/#\S+/gi));
+var sillyString = y.substr(1);
+console.log(sillyString);
 
 </script>
 
