@@ -242,9 +242,9 @@ function addRow(message,time) {
 
 var hashtag_number=1;
 function addHashtag(hashtag,url) {
-  var no_hash_tag=hashtag.substring(1);
+  
   $('#hashtags').prepend('<div id="hashtag'+hashtag_number+'" class="hash_link_container"></div>');
-  $('#hashtag'+hashtag_number).append('<a href='+url+'&hashtag='+no_hash_tag+'>'+hashtag+'</a>');
+  $('#hashtag'+hashtag_number).append('<a href='+url+'>'+hashtag+'</a>');
   hashtag_number=hashtag_number+1;
 }
 
@@ -285,7 +285,7 @@ function displayEntries(phone_number){
 				
 				}
 			}
-			stat.innerHTML='<center>SMS Paper - Your Personal Paper, Always Within Reach.</center><span class="phone-right"><a href="https://www.brueyenterprises.com/sms_paper.html?unique_id='+unique_id+'" class="white_link">'+clean_phone_number+'</a></span>';
+			stat.innerHTML='<center>SMS Paper - Your Personal Paper, Always Within Reach.</center><span class="phone-right">'+clean_phone_number+'</a></span>';
 		});
 	}else{
 		firebase.database().ref('/users/'+phone_number+'/messages/').once('value').then(function(snapshot) {
@@ -303,7 +303,7 @@ function displayEntries(phone_number){
 				
 				}
 			}
-			stat.innerHTML='<center>SMS Paper - Your Personal Paper, Always Within Reach.</center><span class="phone-right"><a href="https://www.brueyenterprises.com/sms_paper.html?unique_id='+unique_id+'" class="white_link">'+clean_phone_number+'</a></span>';
+			stat.innerHTML='<center>SMS Paper - Your Personal Paper, Always Within Reach.</center><span class="phone-right">'+clean_phone_number+'</a></span>';
 		});
 	}		
     
@@ -317,17 +317,17 @@ function displayEntries(phone_number){
 	clean_phone_number='('+clean_phone_number.substring(0,3)+')'+clean_phone_number.substring(3,6)+'-'+clean_phone_number.substring(6,10);
 	
 	//create hashtag menu
-	
-	
-
-
 	firebase.database().ref('/users/'+phone_number+'/hashtags_list/').once('value').then(function(snapshot) {
 		var url = 'https://www.brueyenterprises.com/sms_paper.html?unique_id='+unique_id;
 		var hashtags=snapshot.val();
+
+		var no_hash_tag=''
 		for (var hashtag in hashtags){
+			no_hash_tag=hashtags[hashtag].substring(1);
 			console.log(hashtags[hashtag]);
-			addHashtag(hashtags[hashtag],url);
+			addHashtag(hashtags[hashtag],url+'&hashtag='+no_hash_tag);
 		}
+		addHashtag('All',url);
 	});
 }
 
