@@ -4,6 +4,7 @@
 <head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <title>SMS Paper</title>
+
 <div id="pad_binding" class="bind_container">
 <h1 id="stat"><center>SMS Paper - Initializing</center></h1>
 </div>
@@ -141,6 +142,18 @@ body {
   color: #FFFFFF;
   font-family: "Courier" ;
   padding-left:35%;
+  
+
+}
+
+a.white_link:link{
+color:white;
+}
+a.white_link:visited{
+color:white;
+}
+a.white_link:hover{
+color:white;
 }
 
 .time-right {
@@ -272,7 +285,7 @@ function displayEntries(phone_number){
 				
 				}
 			}
-			stat.innerHTML='<center>SMS Paper - Your Personal Paper, Always Within Reach.</center><span class="phone-right">'+clean_phone_number+'</span>';
+			stat.innerHTML='<center>SMS Paper - Your Personal Paper, Always Within Reach.</center><span class="phone-right"><a href="https://www.brueyenterprises.com/sms_paper.html?unique_id='+unique_id+'" class="white_link">'+clean_phone_number+'</a></span>';
 		});
 	}else{
 		firebase.database().ref('/users/'+phone_number+'/messages/').once('value').then(function(snapshot) {
@@ -290,7 +303,7 @@ function displayEntries(phone_number){
 				
 				}
 			}
-			stat.innerHTML='<center>SMS Paper - Your Personal Paper, Always Within Reach.</center><span class="phone-right">'+clean_phone_number+'</span>';
+			stat.innerHTML='<center>SMS Paper - Your Personal Paper, Always Within Reach.</center><span class="phone-right"><a href="https://www.brueyenterprises.com/sms_paper.html?unique_id='+unique_id+'" class="white_link">'+clean_phone_number+'</a></span>';
 		});
 	}		
     
@@ -309,7 +322,7 @@ function displayEntries(phone_number){
 
 
 	firebase.database().ref('/users/'+phone_number+'/hashtags_list/').once('value').then(function(snapshot) {
-		var url = 'https://www.brueyenterprises.com/sms_paper_test.html?unique_id='+unique_id;
+		var url = 'https://www.brueyenterprises.com/sms_paper.html?unique_id='+unique_id;
 		var hashtags=snapshot.val();
 		for (var hashtag in hashtags){
 			console.log(hashtags[hashtag]);
