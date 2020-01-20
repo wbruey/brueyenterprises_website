@@ -97,6 +97,17 @@ input[type=submit] {
   <input type="submit" value="Is it Loud?">
 </form>
 
+<div class="container">
+	<div class="row">
+		<div class="col-lg-12">
+			<div id="results">
+
+			</div>
+		</div>
+	 </div>
+</div>
+   
+
 <script>
 function autocomplete(inp, arr) {
   /*the autocomplete function takes two arguments,
@@ -196,26 +207,20 @@ function autocomplete(inp, arr) {
 }
 
 
-</script>
 
 
-   <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div id="results">
 
-                </div>
-            </div>
-         </div>
-   </div>
-   
-<script>
-   		 /*An array containing all the restaurant names in the world:*/
+
+
+	 var restaurants = [];     	
+	 console.log(restaurants)
+	/*An array containing all the restaurant names in the world:*/
 	  var search_inp=document.getElementById("myInput");
 	  search_inp.addEventListener("input", function(e) {
 		  var search_text = this.value;
 		
-		 var restaurants = [];      
+		 restaurants = [];      
+		 console.log(restaurants)
 		 var myurl = "https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/autocomplete?text="+search_text+"&latitude=40.764500&longitude=-73.964844";
 		 //var myurl = "https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=by-chloe&location=boston";
          $.ajax({
@@ -243,6 +248,8 @@ function autocomplete(inp, arr) {
 					// Append our result into our page
 					$('#results').append('<h5>' + name + '</h5>');
 					restaurants.push(name);
+					console.log(restaurants)
+					//autocomplete(document.getElementById("myInput"), restaurants); 
 						
 				});
                 //} else {
@@ -250,16 +257,18 @@ function autocomplete(inp, arr) {
                 //    $('#results').append('<h5>We discovered no results!</h5>');
                 //}
             }
-         });  
+
+        });  
 
 	  });
   
 
-		 
+
+/*initiate the autocomplete function on the "myInput" element, and pass along the restaurants array as possible autocomplete values:*/
+console.log(restaurants)
 
 
-		/*initiate the autocomplete function on the "myInput" element, and pass along the restaurants array as possible autocomplete values:*/
-		autocomplete(document.getElementById("myInput"), restaurants);
+
 		 
 </script>	
 
