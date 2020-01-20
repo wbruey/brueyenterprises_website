@@ -195,11 +195,7 @@ function autocomplete(inp, arr) {
   });
 }
 
-/*An array containing all the restaurant names in the world:*/
-var restaurants = ["McDonalds", "Mulligans"];
 
-/*initiate the autocomplete function on the "myInput" element, and pass along the restaurants array as possible autocomplete values:*/
-autocomplete(document.getElementById("myInput"), restaurants);
 </script>
 
 
@@ -214,7 +210,13 @@ autocomplete(document.getElementById("myInput"), restaurants);
    </div>
    
 <script>
-         var myurl = "https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/autocomplete?text=eat&latitude=40.764500&longitude=-73.964844";
+   		 /*An array containing all the restaurant names in the world:*/
+	  var search_inp=document.getElementById("myInput");
+	  search_inp.addEventListener("input", function(e) {
+		  var search_text = this.value;
+		
+		 var restaurants = [];      
+		 var myurl = "https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/autocomplete?text="+search_text+"&latitude=40.764500&longitude=-73.964844";
 		 //var myurl = "https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=by-chloe&location=boston";
          $.ajax({
             url: myurl,
@@ -240,6 +242,7 @@ autocomplete(document.getElementById("myInput"), restaurants);
 					var name = item.name;
 					// Append our result into our page
 					$('#results').append('<h5>' + name + '</h5>');
+					restaurants.push(name);
 						
 				});
                 //} else {
@@ -248,6 +251,15 @@ autocomplete(document.getElementById("myInput"), restaurants);
                 //}
             }
          });  
+
+	  });
+  
+
+		 
+
+
+		/*initiate the autocomplete function on the "myInput" element, and pass along the restaurants array as possible autocomplete values:*/
+		autocomplete(document.getElementById("myInput"), restaurants);
 		 
 </script>	
 
