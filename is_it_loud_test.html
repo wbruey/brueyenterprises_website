@@ -1,8 +1,27 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Is it loud there?</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<style>
+body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
+</style>
+<body class="w3-light-grey">
+
+<!-- w3-content defines a container for fixed size centered content, 
+and is wrapped around the whole page content, except for the footer in this example -->
+<div class="w3-content" style="max-width:1400px">
+
+<!-- Header -->
+<header class="w3-container w3-center w3-padding-32"> 
 <script type="text/javascript" src="jquery-3.4.1.js"></script>
+
+
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 * {
   box-sizing: border-box;
@@ -19,7 +38,7 @@ body {
 }
 
 input {
-  border: 1px solid transparent;
+  border: 1px solid;
   background-color: #f1f1f1;
   padding: 10px;
   font-size: 16px;
@@ -69,22 +88,28 @@ input[type=submit] {
 </head>     
 <body>
 
-<h2>Autocomplete</h2>
-
-<p>Start typing:</p>
 
 <!--Make sure the form has the autocomplete function switched off:-->
 <form autocomplete="off" action="/action_page.php">
-  <div class="autocomplete" style="width:300px;">
-    <input id="myInput" type="text" name="myCountry" placeholder="Country">
+  <div class="autocomplete" style="width:50%;">
+    <input id="myInput" type="text" name="myRestaurant" placeholder="Restaurant">
   </div>
-  <input type="submit">
+  <input type="submit" value="Is it Loud?">
 </form>
 
 
+<div class="container">
+	<div class="row">
+		<div class="col-lg-12">
+			<div id="results">
+
+			</div>
+		</div>
+	 </div>
+</div>				  
+
+
 <script>
-
-
 function autocomplete(inp, arr) {
   /*the autocomplete function takes two arguments,
   the text field element and an array of possible autocompleted values:*/
