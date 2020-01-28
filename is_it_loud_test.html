@@ -138,7 +138,7 @@ function autocomplete(inp, arr) {
 			carry_object.parentNode.appendChild(a);
 			arr=[];
 			var search_text = val;
-			var myurl = "https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/autocomplete?text="+search_text+"&latitude=40.764500&longitude=-73.964844";
+			var myurl = "https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term="+search_text+"&latitude=40.764500&longitude=-73.964844";
 			console.log(myurl);
 			$.ajax({
 				url: myurl,
@@ -164,6 +164,8 @@ function autocomplete(inp, arr) {
 							// Store each business's object in a variable
 						
 						var name = item.name;
+						var loc_address= item.location.address1;
+						name = name + ' - ' + loc_address;
 						console.log(name);
 						// Append our result into our page
 						//$('#results').append('<h5>' + name + '</h5>');
