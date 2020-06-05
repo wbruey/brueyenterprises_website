@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.9.2/firebase.js"></script>
+<title>N171ML</title>
+
+</head>
+<style>
+#customers {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#customers td, #customers th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#customers tr:nth-child(even){background-color: #f2f2f2;}
+
+#customers tr:hover {background-color: #ddd;}
+
+#customers th {
+  padding-top: 12px;
+  padding-bottom: 12px;a
+  text-align: left;
+  background-color: #4CAF50;
+  color: white;
+}
+
+
+.darker {
+  border-color: #ccc;
+  background-color: #ddd;
+}
+
+
+body {
+  margin: 0 auto;
+  max-width: 1000px;
+  padding: 20px;
+}
+
+.container {
+  border: 2px solid #1D4288;
+  background-color: #FBF2BC;
+  border-radius: 15px;
+  padding: 0px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin: 10px 0;
+  font-size: 1.5em;
+  
+}
+.pad_container {
+ 
+  padding:2px;
+  width:80%;
+  float:left;
+  
+}
+
+.body_container{
+	width:100%;
+}
+
+.hash_container {
+    width:18%;
+	float: right;
+	padding:2px;
+	text-align: center;
+	font-size: 2em;
+}
+
+.hash_link_container{
+  border: 2px solid #1D4288;
+  background-color: #FBF2BC;
+  border-radius: 15px;
+  padding-top: 75px;
+  padding-bottom: 75px;
+  margin: 10px;
+  
+	
+}
+
+.bind_container {
+  border: 2px solid #1D4288;
+  background-color: #1D4288;
+  color: #FFFFFF ;
+  border-radius: 0px;
+  padding: 10px;
+  margin: 2px 0;
+  border-radius: 5px;
+  font-weight: normal;
+  font-family: "Century" ;
+ 
+}
+
+
+.container::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.container img {
+  float: left;
+  max-width: 60px;
+  width: 100%;
+  margin-right: 20px;
+  border-radius: 50%;
+}
+
+.container img.right {
+  float: right;
+  margin-left: 20px;
+  margin-right:0;
+}
+
+.phone-right {
+  font-size: 1em;
+  color: #FFFFFF;
+  font-family: "Courier" ;
+  padding-left:35%;
+  
+
+}
+
+a.white_link:link{
+color:white;
+}
+a.white_link:visited{
+color:white;
+}
+a.white_link:hover{
+color:white;
+}
+
+.time-right {
+  float: right;
+  color: #5B5B5B;
+  font-family: "Courier" ;
+}
+
+.time-left {
+  float: left;
+  color: #999;
+}
+</style>
+
+
+<body id="body">
+
+
+<h1 id="stat"><center>N171ML Maintenance Report</center></h1>
+
+<script>
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCMPbs-XBKLb_odiPtzXUY1rt5tV4x8Wbc",
+  authDomain: "flightcomputer-2c62d.firebaseapp.com",
+  databaseURL: "https://flightcomputer-2c62d.firebaseio.com",
+  projectId: "flightcomputer-2c62d",
+  storageBucket: "flightcomputer-2c62d.appspot.com",
+  messagingSenderId: "1021900970009",
+  appId: "1:1021900970009:web:bf3ebcf138f040dd49f288",
+  measurementId: "G-PTPQ8QW8J5"
+};
+
+firebase.initializeApp(firebaseConfig);
+var database = firebase.database();
+firebase.database().ref('/reports/maintenance_summary_html').once('value').then(function(snapshot){
+	html_to_publish=snapshot.val();
+	body.innerHTML=html_to_publish;
+});
+
+
+</script>
+
+
+</body>
