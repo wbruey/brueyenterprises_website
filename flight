@@ -1,8 +1,6 @@
 <html>
 <head>
-<h1>Rocket Sim</h1>
-
-
+<h1>N171ML Flight Telemetry</h1>
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
@@ -16,18 +14,26 @@
 <link href="metricsgraphics.css" rel="stylesheet" type="text/css">
 <script type='text/javascript' src='metricsgraphics.js'></script>
 
-<script src="https://www.gstatic.com/firebasejs/5.9.2/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.17.2/firebase.js"></script>
+
 
 
 </head>
 <body id="body">
-<div id="chart"></div>
-<div id="chart2"></div>
 
+<div id="flight_selector"> 
+	<label for="flights">Choose a Flight:</label>
+	<select name="flights" id="flights">
+	</select>
+	<button onclick="display_flight_telem()">Show Telemetry</button>
+</div>
+
+<div id="test">
+</div>
 
   
 <script type="text/javascript">
-data=[]
+//data=[];
 
 const firebaseConfig = {
   apiKey: "AIzaSyCMPbs-XBKLb_odiPtzXUY1rt5tV4x8Wbc",
@@ -40,8 +46,41 @@ const firebaseConfig = {
   measurementId: "G-PTPQ8QW8J5"
 };
 
+
+
 firebase.initializeApp(firebaseConfig);
 var database = firebase.database();
+var storage = firebase.storage();
+var storageRef = storage.ref();
+var flight_telem_ref=storageRef.child('flight_telem');
+
+//get the list of telem_files from firebase storage and populate the user dropdown
+function list_of_flight_telem_files() {
+	flight_dropdown_html='';
+	flight_file_names=[];
+	flight_telem_ref.listAll().then(function(res){
+		res.items.forEach(function(itemRef){
+			flight_file_name=itemRef.name;
+			flight_name=flight_file_name.substring(0,flight_file_name.length-4);
+			flight_file_names.push(flight_file_name);
+			flight_dropdown_html=flight_dropdown_html+'<option value="'+flight_file_name+'">'+flight_name+'</option>';
+		});
+		flights.innerHTML=flight_dropdown_html;
+		return flight_file_names;
+	});
+}
+
+function display_flight_telem(){
+	var drop_down = document.getElementById("flights");
+	flight_file_name=drop_down.options[drop_down.selectedIndex].value;
+	test.innerHTML=flight_file_name;
+}
+
+my_flights=list_of_flight_telem_files();
+
+console.log(flight_file_names);
+
+/*
 firebase.database().ref('/telemetry/1597026187').once('value').then(function(snapshot){
 	my_data=snapshot.val();
 
@@ -65,8 +104,32 @@ firebase.database().ref('/telemetry/1597026187').once('value').then(function(sna
 	console.log(data)
 
 });
+*/
 
+/*
+storageRef.child('03-Jul-2020_10_17_29.csv').getDownloadURL().then(function(url) {
+  var xhr = new XMLHttpRequest();
+  xhr.responseType = 'blob';
+  xhr.onload = function(event) {
+    var blob = xhr.response;
+	console.log(blob);
+	chart2.innerHTML=blob;
+	var reader = new FileReader();
+	reader.readAsText(blob);
+	reader.onload=function loadHandler(event){
+		var csv = event.target.result;
+		console.log(csv);
+	}
+  };
+  xhr.open('GET', url);
+  xhr.send();
+  
+  
 
+}).catch(function(error) {
+  console.log(error);
+});
+*/
 
 
 
