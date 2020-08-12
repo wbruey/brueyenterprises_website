@@ -28,7 +28,7 @@
 	<button onclick="display_flight_telem()">Show Telemetry</button>
 </div>
 
-<div id="chts">
+<div id="t_cpu">
 </div>
 
   
@@ -83,6 +83,12 @@ function processData(csv) {
 		var telem_row=allTextLines[i].split(',');	
 		for (var j=0; j<telem_row.length; j++){
 			datapoint_object[csv_columns[j]]=telem_row[j];
+			/// put in human readable time stamp
+			if (j==0){
+				date = new Date(telem_row[j]*1000)
+				datapoint_object['human_time']=date;
+				console.log(date);
+			}
 		}
 		flight_data.push(datapoint_object);
 	}	
@@ -105,13 +111,13 @@ function display_flight_telem(){
 				var csv = event.target.result;
 				flight_data=processData(csv);
 				MG.data_graphic({
-				title: "Cylinder Head Temps",
+				title: "CPU Temp",
 				data: flight_data,
 				width: 650,
 				height: 650,
-				target: '#chts',
-				x_accessor: 'time',
-				y_accessor: 'CHT1',
+				target: '#t_cpu',
+				x_accessor: 'human_time',
+				y_accessor: 't_cpu',
 				});				
 			}
 		};
