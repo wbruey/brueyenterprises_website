@@ -28,7 +28,7 @@
 	<button onclick="display_flight_telem()">Show Telemetry</button>
 </div>
 
-<div id="test">
+<div id="chts">
 </div>
 
   
@@ -70,14 +70,57 @@ function list_of_flight_telem_files() {
 	});
 }
 
+function processData(csv) {
+	var allTextLines = csv.split(/\r\n|\n/);
+	flight_data=[];
+	
+	csv_header=allTextLines[0];
+	csv_columns=csv_header.split(',');
+	console.log(csv_columns);
+	
+	for (var i=1; i<allTextLines.length-1;i++){
+		datapoint_object={};
+		var telem_row=allTextLines[i].split(',');	
+		for (var j=0; j<telem_row.length; j++){
+			datapoint_object[csv_columns[j]]=telem_row[j];
+		}
+		flight_data.push(datapoint_object);
+	}	
+	return flight_data;
+
+}
+	
 function display_flight_telem(){
 	var drop_down = document.getElementById("flights");
 	flight_file_name=drop_down.options[drop_down.selectedIndex].value;
-	test.innerHTML=flight_file_name;
+	console.log(flight_file_name);
+	flight_telem_ref.child(flight_file_name).getDownloadURL().then(function(url){
+		var xhr = new XMLHttpRequest();
+		xhr.responseType = 'blob';
+		xhr.onload = function(event) {
+			var blob = xhr.response;
+			var reader = new FileReader();
+			reader.readAsText(blob);
+			reader.onload=function loadHandler(event){
+				var csv = event.target.result;
+				flight_data=processData(csv);
+				MG.data_graphic({
+				title: "Cylinder Head Temps",
+				data: flight_data,
+				width: 650,
+				height: 650,
+				target: '#chts',
+				x_accessor: 'time',
+				y_accessor: 'CHT1',
+				});				
+			}
+		};
+	xhr.open('GET', url);
+	xhr.send();	
+	});
 }
 
 my_flights=list_of_flight_telem_files();
-
 console.log(flight_file_names);
 
 /*
@@ -104,8 +147,8 @@ firebase.database().ref('/telemetry/1597026187').once('value').then(function(sna
 	console.log(data)
 
 });
-*/
 
+*/
 /*
 storageRef.child('03-Jul-2020_10_17_29.csv').getDownloadURL().then(function(url) {
   var xhr = new XMLHttpRequest();
@@ -113,7 +156,7 @@ storageRef.child('03-Jul-2020_10_17_29.csv').getDownloadURL().then(function(url)
   xhr.onload = function(event) {
     var blob = xhr.response;
 	console.log(blob);
-	chart2.innerHTML=blob;
+	chts.innerHTML=blob;
 	var reader = new FileReader();
 	reader.readAsText(blob);
 	reader.onload=function loadHandler(event){
