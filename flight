@@ -17,7 +17,6 @@
 <script src="https://www.gstatic.com/firebasejs/7.17.2/firebase.js"></script>
 
 
-
 </head>
 <body id="body">
 
@@ -27,9 +26,28 @@
 	</select>
 	<button onclick="display_flight_telem()">Show Telemetry</button>
 </div>
+<div id="gear_up"></div>
+<div id="OAT"></div>
+<div id="RPM"></div>
+<div id="CHTs"></div>
+<div id="EGTs"></div>
+<div id="fuel_flow"></div>
+<div id="manifold_pressure"></div>
+<div id="oil_temp"></div>
+<div id="oil_pressure"></div>
+<div id="fuel_pressure"></div>
 
-<div id="t_cpu">
-</div>
+<div id="t_cpu"></div>
+<div id="fc_RSSI"></div>
+<div id="fc_bit_error_rate"></div>
+<div id="modem_busy"></div>
+
+<div id="bus_voltage"></div>
+<div id="bus_current"></div>
+
+<div id="tach_time"></div>
+<div id="hobbs_time"></div>
+<div id="frame_index"></div>
 
   
 <script type="text/javascript">
@@ -76,18 +94,23 @@ function processData(csv) {
 	
 	csv_header=allTextLines[0];
 	csv_columns=csv_header.split(',');
-	console.log(csv_columns);
 	
 	for (var i=1; i<allTextLines.length-1;i++){
 		datapoint_object={};
 		var telem_row=allTextLines[i].split(',');	
 		for (var j=0; j<telem_row.length; j++){
-			datapoint_object[csv_columns[j]]=telem_row[j];
+			if (telem_row[j]=='True'){
+				datapoint_object[csv_columns[j]]=1;
+			}else if (telem_row[j]=='False'){
+				datapoint_object[csv_columns[j]]=0;
+			}else{
+				datapoint_object[csv_columns[j]]=Number(telem_row[j]);
+			}
 			/// put in human readable time stamp
 			if (j==0){
 				date = new Date(telem_row[j]*1000)
 				datapoint_object['human_time']=date;
-				console.log(date);
+				//console.log(date);
 			}
 		}
 		flight_data.push(datapoint_object);
@@ -109,16 +132,220 @@ function display_flight_telem(){
 			reader.readAsText(blob);
 			reader.onload=function loadHandler(event){
 				var csv = event.target.result;
-				flight_data=processData(csv);
+				flight_data=processData(csv); 
+				//console.log(flight_data);
+			
 				MG.data_graphic({
-				title: "CPU Temp",
+				title: "Cylinder Head Temps (F)",
 				data: flight_data,
 				width: 650,
-				height: 650,
+				height: 200,
+				area: false,
+				//linked: true,
+				target: '#CHTs',
+				x_accessor: 'human_time',
+				y_accessor: ['CHT1','CHT2','CHT3','CHT4']
+				});	
+				
+				MG.data_graphic({
+				title: "Exaust Gas Temps (F)",
+				data: flight_data,
+				width: 650,
+				height: 200,
+				area: false,
+				//linked: true,
+				target: '#EGTs',
+				x_accessor: 'human_time',
+				y_accessor: ['EGT1','EGT2','EGT3','EGT4']
+				});	
+			
+				MG.data_graphic({
+				title: "LTE Modem RSSI",
+				data: flight_data,
+				width: 650,
+				height: 200,
+				//linked: true,
+				target: '#fc_RSSI',
+				x_accessor: 'human_time',
+				y_accessor: 'fc_RSSI',
+				});		
+
+				MG.data_graphic({
+				title: "Manifold Pressure (psi)",
+				data: flight_data,
+				width: 650,
+				height: 200,
+				//linked: true,
+				target: '#manifold_pressure',
+				x_accessor: 'human_time',
+				y_accessor: 'manifold_pressure',
+				});		
+				
+				MG.data_graphic({
+				title: "Oil Temp (F)",
+				data: flight_data,
+				width: 650,
+				height: 200,
+				//linked: true,
+				target: '#oil_temp',
+				x_accessor: 'human_time',
+				y_accessor: 'oil_temp',
+				});		
+				
+				MG.data_graphic({
+				title: "Tach Time (h)",
+				data: flight_data,
+				width: 650,
+				height: 200,
+				//linked: true,
+				target: '#tach_time',
+				x_accessor: 'human_time',
+				y_accessor: 'tach_time',
+				});		
+				
+				MG.data_graphic({
+				title: "Hobbs Time (h)",
+				data: flight_data,
+				width: 650,
+				height: 200,
+				//linked: true,
+				target: '#hobbs_time',
+				x_accessor: 'human_time',
+				y_accessor: 'hobbs_time',
+				});	
+				
+				MG.data_graphic({
+				title: "Oil Pressure (psi)",
+				data: flight_data,
+				width: 650,
+				height: 200,
+				//linked: true,
+				target: '#oil_pressure',
+				x_accessor: 'human_time',
+				y_accessor: 'oil_pressure',
+				});		
+				
+				MG.data_graphic({
+				title: "Fuel Pressure (psi)",
+				data: flight_data,
+				width: 650,
+				height: 200,
+				//linked: true,
+				target: '#fuel_pressure',
+				x_accessor: 'human_time',
+				y_accessor: 'fuel_pressure',
+				});		
+				
+				MG.data_graphic({
+				title: "Bus Voltage (V)",
+				data: flight_data,
+				width: 650,
+				height: 200,
+				//linked: true,
+				target: '#bus_voltage',
+				x_accessor: 'human_time',
+				y_accessor: 'bus_voltage',
+				});		
+				
+				MG.data_graphic({
+				title: "Fuel Flow (gph)",
+				data: flight_data,
+				width: 650,
+				height: 200,
+				//linked: true,
+				target: '#fuel_flow',
+				x_accessor: 'human_time',
+				y_accessor: 'fuel_flow',
+				});	
+
+				MG.data_graphic({
+				title: "Outside Air Temp (F)",
+				data: flight_data,
+				width: 650,
+				height: 200,
+				//linked: true,
+				target: '#OAT',
+				x_accessor: 'human_time',
+				y_accessor: 'OAT',
+				});	
+				
+				MG.data_graphic({
+				title: "Bus Current (A)",
+				data: flight_data,
+				width: 650,
+				height: 200,
+				//linked: true,
+				target: '#bus_current',
+				x_accessor: 'human_time',
+				y_accessor: 'bus_current',
+				});	
+
+				MG.data_graphic({
+				title: "RPM",
+				data: flight_data,
+				width: 650,
+				height: 200,
+				//linked: true,
+				target: '#RPM',
+				x_accessor: 'human_time',
+				y_accessor: 'RPM',
+				});				
+			
+				MG.data_graphic({
+				title: "LTE Modem Activity",
+				data: flight_data,
+				width: 650,
+				height: 200,
+				//linked: true,
+				target: '#modem_busy',
+				x_accessor: 'human_time',
+				y_accessor: 'modem_busy',
+				});	
+			
+				MG.data_graphic({
+				title: "CPU Temp (F)",
+				data: flight_data,
+				width: 650,
+				height: 200,
+				//linked: true,
 				target: '#t_cpu',
 				x_accessor: 'human_time',
 				y_accessor: 't_cpu',
-				});				
+				});	
+				
+				MG.data_graphic({
+				title: "Gear Up",
+				data: flight_data,
+				width: 650,
+				height: 200,
+				//linked: true,
+				target: '#gear_up',
+				x_accessor: 'human_time',
+				y_accessor: 'gear_up',
+				});		
+				
+				MG.data_graphic({
+				title: "FC Bit Error Metric",
+				data: flight_data,
+				width: 650,
+				height: 200,
+				//linked: true,
+				target: '#fc_bit_error_rate',
+				x_accessor: 'human_time',
+				y_accessor: 'fc_bit_error_rate',
+				});		
+				
+				MG.data_graphic({
+				title: "Frame Index",
+				data: flight_data,
+				width: 650,
+				height: 200,
+				//linked: true,
+				max_y:flight_data.length,
+				target: '#frame_index',
+				x_accessor: 'human_time',
+				y_accessor: 'frame_index',
+				});		
 			}
 		};
 	xhr.open('GET', url);
