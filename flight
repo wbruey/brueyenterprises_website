@@ -40,7 +40,6 @@
 <div id="t_cpu"></div>
 <div id="fc_RSSI"></div>
 <div id="fc_bit_error_rate"></div>
-<div id="modem_busy"></div>
 
 <div id="bus_voltage"></div>
 <div id="bus_current"></div>
@@ -291,16 +290,6 @@ function display_flight_telem(){
 				y_accessor: 'RPM',
 				});				
 			
-				MG.data_graphic({
-				title: "LTE Modem Activity",
-				data: flight_data,
-				width: 650,
-				height: 200,
-				//linked: true,
-				target: '#modem_busy',
-				x_accessor: 'human_time',
-				y_accessor: 'modem_busy',
-				});	
 			
 				MG.data_graphic({
 				title: "CPU Temp (F)",
