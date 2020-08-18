@@ -127,17 +127,33 @@
     <td><input type="checkbox" id="bus_voltage_box" checked>Bus Voltage</td>
   </tr>
   <tr>
-    <td><input type="checkbox" id="bus_current_box" checked>Bus CurrentI</td>
+    <td><input type="checkbox" id="bus_current_box" checked>Bus Current</td>
     <td><input type="checkbox" id="tach_time_box" checked>Tach Time</td>
     <td><input type="checkbox" id="hobbs_time_box" checked>Hobbs Time</td>
   </tr>
+  <tr>
+    <td><input type="checkbox" id="press_altitude_box" checked>Pressure Altitude</td>
+    <td><input type="checkbox" id="TAS_box" checked>True Airspeed</td>
+    <td><input type="checkbox" id="pitch_box" checked>Pitch</td>
+  </tr>
+  <tr>
+    <td><input type="checkbox" id="roll_box" checked>Roll</td>
+    <td><input type="checkbox" id="heading_box" checked>Heading</td>
+    <td><input type="checkbox" id="vertical_gs_box" checked>Vertical Gs</td>
+  </tr>
+  <tr>
+    <td><input type="checkbox" id="vertical_speed_box" checked>Vertical Speed</td>
+    <td><input type="checkbox" id="wind_speed_box" checked>Wind Speed</td>
+    <td><input type="checkbox" id="wind_direction_box" checked>Wind Direction</td>
+  </tr>
+
 </table>
 <p></p>
 </div>
 
 
 
-<button class="block" onclick="display_flight_telem()">Refresh Telemetry</button>
+<button class="block" onclick="display_flight_telem()" id="tlm_button">Load Telemetry</button>
 
 
 
@@ -166,6 +182,19 @@
 
 <div id="bus_voltage"></div>
 <div id="bus_current"></div>
+
+<div id="press_altitude"></div>
+<div id="TAS"></div>
+
+<div id="pitch"></div>
+<div id="roll"></div>
+<div id="heading"></div>
+<div id="vertical_gs"></div>
+<div id="vertical_speed"></div>
+
+<div id="wind_speed"></div>
+<div id="wind_direction"></div>
+
 
 <div id="tach_time"></div>
 <div id="hobbs_time"></div>
@@ -246,26 +275,35 @@ function processData(csv) {
 	
 function display_flight_telem(){
 
+	//button changes to say loading.
 	
 
 	telem_ids={
 		gear_up:{checkbox:'gear_up_box',title:'Gear Up',target:'#gear_up',legend:'Gear',y_accessor:'gear_up',html_id: gear_up},
-		OAT:'OAT_box',
-		RPM:'RPM_box',
-		CHTs:'CHTs_box',
-		EGTs:'EGTs_box',
-		fuel_flow:'fuel_flow_box',
-		manifold_pressure:'manifold_pressure_box',
-		oil_temp:'oil_temp_box',
-		oil_pressure:'oil_pressure_box',
-		fuel_pressure:'fuel_pressure_box',
-		t_cpu:'t_cpu_box',
-		fc_RSSI:'fc_RSSI_box',
-		fc_bit_error_rate:'fc_bit_error_rate_box',
-		bus_voltage:'bus_voltage_box',
-		bus_current:'bus_current_box',
-		tach_time:'tach_time_box',
-		hobbs_time:'hobbs_time_box',
+		OAT:{checkbox:'OAT_box',title:'Outside Air Temp (F)',target:'#OAT',legend:'OAT',y_accessor:'OAT',html_id: OAT},
+		RPM:{checkbox:'RPM_box',title:'RPM',target:'#RPM',legend:'RPM',y_accessor:'RPM',html_id: RPM},
+		CHTs:{checkbox:'CHTs_box',title:'Cylinder Head Temps (F)',target:'#CHTs',legend:['CHT1','CHT2','CHT3','CHT4'],y_accessor:['CHT1','CHT2','CHT3','CHT4'],html_id: CHTs},
+		EGTs:{checkbox:'EGTs_box',title:'Exaust Gas Temps (F)',target:'#EGTs',legend:['EGT1','EGT2','EGT3','EGT4'],y_accessor:['EGT1','EGT2','EGT3','EGT4'],html_id: EGTs},
+		fuel_flow:{checkbox:'fuel_flow_box',title:'Fuel Flow (gph)',target:'#fuel_flow',legend:'fuel_flow',y_accessor:'fuel_flow',html_id: fuel_flow},
+		manifold_pressure:{checkbox:'manifold_pressure_box',title:'Manifold Pressure (psi)',target:'#manifold_pressure',legend:'manifold_pressure',y_accessor:'manifold_pressure',html_id: manifold_pressure},
+		oil_temp:{checkbox:'oil_temp_box',title:'Oil Temp (F)',target:'#oil_temp',legend:'oil_temp',y_accessor:'oil_temp',html_id: oil_temp},
+		oil_pressure:{checkbox:'oil_pressure_box',title:'Oil Pressure (psi)',target:'#oil_pressure',legend:'oil_pressure',y_accessor:'oil_pressure',html_id: oil_pressure},
+		fuel_pressure:{checkbox:'fuel_pressure_box',title:'Fuel Pressure (psi)',target:'#fuel_pressure',legend:'fuel_pressure',y_accessor:'fuel_pressure',html_id: fuel_pressure},
+		t_cpu:{checkbox:'t_cpu_box',title:'CPU Temp (F)',target:'#t_cpu',legend:'t_cpu',y_accessor:'t_cpu',html_id: t_cpu},
+		fc_RSSI:{checkbox:'fc_RSSI_box',title:'Modem RSSI',target:'#fc_RSSI',legend:'fc_RSSI',y_accessor:'fc_RSSI',html_id: fc_RSSI},
+		fc_bit_error_rate:{checkbox:'fc_bit_error_rate_box',title:'Modem Bit Error Rate Metric',target:'#fc_bit_error_rate',legend:'fc_bit_error_rate',y_accessor:'fc_bit_error_rate',html_id: fc_bit_error_rate},
+		bus_voltage:{checkbox:'bus_voltage_box',title:'Bus Voltage (V)',target:'#bus_voltage',legend:'bus_voltage',y_accessor:'bus_voltage',html_id: bus_voltage},
+		bus_current:{checkbox:'bus_current_box',title:'Bus Current (A)',target:'#bus_current',legend:'bus_current',y_accessor:'bus_current',html_id: bus_current},
+		tach_time:{checkbox:'tach_time_box',title:'Tach Time (h)',target:'#tach_time',legend:'tach_time',y_accessor:'tach_time',html_id: tach_time},
+		press_altitude:{checkbox:'press_altitude_box',title:'Pressure Altitude (ft)',target:'#press_altitude',legend:'press_altitude',y_accessor:'press_altitude',html_id: press_altitude},
+		TAS:{checkbox:'TAS_box',title:'True Airspeed (kts)',target:'#TAS',legend:'TAS',y_accessor:'TAS',html_id: TAS},
+		pitch:{checkbox:'pitch_box',title:'Pitch (deg)',target:'#pitch',legend:'pitch',y_accessor:'pitch',html_id: pitch},
+		roll:{checkbox:'roll_box',title:'Roll (deg)',target:'#roll',legend:'roll',y_accessor:'roll',html_id: roll},
+		heading:{checkbox:'heading_box',title:'Magnetic Heading (deg)',target:'#heading',legend:'heading',y_accessor:'heading',html_id: heading},
+		vertical_gs:{checkbox:'vertical_gs_box',title:'Vertical Gs',target:'#vertical_gs',legend:'vertical_gs',y_accessor:'vertical_gs',html_id: vertical_gs},
+		vertical_speed:{checkbox:'vertical_speed_box',title:'Vertical Speed (ft/s)',target:'#vertical_speed',legend:'vertical_speed',y_accessor:'vertical_speed',html_id: vertical_speed},
+		wind_speed:{checkbox:'wind_speed_box',title:'Wind Speed (kts)',target:'#wind_speed',legend:'wind_speed',y_accessor:'wind_speed',html_id: wind_speed},
+		wind_direction:{checkbox:'wind_direction_box',title:'Wind Direction (deg magnetic)',target:'#wind_direction',legend:'wind_direction',y_accessor:'wind_direction',html_id: wind_direction},
 	};
 
 	
@@ -273,7 +311,9 @@ function display_flight_telem(){
 	var drop_down = document.getElementById("flights");
 	flight_file_name=drop_down.options[drop_down.selectedIndex].value;
 	console.log(flight_file_name);
+	console.log(flight_file_name.length);
 	if (flight_file_name.length>1){
+		tlm_button.innerHTML='Loading....'
 		flight_telem_ref.child(flight_file_name).getDownloadURL().then(function(url){
 			var xhr = new XMLHttpRequest();
 			xhr.responseType = 'blob';
@@ -286,223 +326,25 @@ function display_flight_telem(){
 					flight_data=processData(csv); 
 					//console.log(flight_data);
 
-					if(document.getElementById(telem_ids.gear_up.checkbox).checked){
-						MG.data_graphic({
-						title: telem_ids.gear_up.title,
-						data: flight_data,
-						full_width:true,
-						height:200,
-						//linked: true,
-						target: telem_ids.gear_up.target,
-						x_accessor: 'human_time',
-						y_accessor: telem_ids.gear_up.y_accessor,
-						});		
-					}else{
-						telem_ids.gear_up.html_id.innerHTML='';
-					}
-				
-					if(document.getElementById(telem_ids.CHTs).checked){
-						MG.data_graphic({
-						title: "Cylinder Head Temps (F)",
-						data: flight_data,
-						full_width:true,
-						height: 200,
-						area: false,
-						//linked: true,
-						target: '#CHTs',
-						x_accessor: 'human_time',
-						legend: ['CHT1','CHT2','CHT3','CHT4'],
-						y_accessor: ['CHT1','CHT2','CHT3','CHT4']
-						});	
-					}else{
-						CHTs.innerHTML='';
-					}
-					
-					if(document.getElementById(telem_ids.EGTs).checked){					
-						MG.data_graphic({
-						title: "Exaust Gas Temps (F)",
-						data: flight_data,
-						full_width:true,
-						height: 200,
-						area: false,
-						//linked: true,
-						target: '#EGTs',
-						x_accessor: 'human_time',
-						legend:  ['EGT1','EGT2','EGT3','EGT4'],
-						y_accessor: ['EGT1','EGT2','EGT3','EGT4']
-						});	
-					}else{
-						EGTs.innerHTML='';
-					}
-					
-					MG.data_graphic({
-					title: "LTE Modem RSSI",
-					data: flight_data,
-					full_width:true,
-					height: 200,
-					//linked: true,
-					target: '#fc_RSSI',
-					x_accessor: 'human_time',
-					y_accessor: 'fc_RSSI',
-					});		
+					telem_ids_keys=Object.keys(telem_ids);
+					telem_ids_keys.forEach(function(telem_ids_key){
+						if(document.getElementById(telem_ids[telem_ids_key]['checkbox']).checked){
+							MG.data_graphic({
+							title: telem_ids[telem_ids_key]['title'],
+							data: flight_data,
+							full_width:true,
+							height:200,
+							//linked: true,
+							target: telem_ids[telem_ids_key]['target'],
+							x_accessor: 'human_time',
+							y_accessor: telem_ids[telem_ids_key]['y_accessor'],
+							});		
+						}else{
+							telem_ids[telem_ids_key]['html_id'].innerHTML='';
+						}
+					});
 
-					MG.data_graphic({
-					title: "Manifold Pressure (psi)",
-					data: flight_data,
-					full_width:true,
-					height: 200,
-					//linked: true,
-					target: '#manifold_pressure',
-					x_accessor: 'human_time',
-					y_accessor: 'manifold_pressure',
-					});		
-					
-					MG.data_graphic({
-					title: "Oil Temp (F)",
-					data: flight_data,
-					full_width:true,
-					height: 200,
-					//linked: true,
-					target: '#oil_temp',
-					x_accessor: 'human_time',
-					y_accessor: 'oil_temp',
-					});		
-					
-					MG.data_graphic({
-					title: "Tach Time (h)",
-					data: flight_data,
-					full_width:true,
-					height: 200,
-					//linked: true,
-					target: '#tach_time',
-					x_accessor: 'human_time',
-					y_accessor: 'tach_time',
-					});		
-					
-					MG.data_graphic({
-					title: "Hobbs Time (h)",
-					data: flight_data,
-					full_width:true,
-					height: 200,
-					//linked: true,
-					target: '#hobbs_time',
-					x_accessor: 'human_time',
-					y_accessor: 'hobbs_time',
-					});	
-					
-					MG.data_graphic({
-					title: "Oil Pressure (psi)",
-					data: flight_data,
-					full_width:true,
-					height: 200,
-					//linked: true,
-					target: '#oil_pressure',
-					x_accessor: 'human_time',
-					y_accessor: 'oil_pressure',
-					});		
-					
-					MG.data_graphic({
-					title: "Fuel Pressure (psi)",
-					data: flight_data,
-					full_width:true,
-					height: 200,
-					//linked: true,
-					target: '#fuel_pressure',
-					x_accessor: 'human_time',
-					y_accessor: 'fuel_pressure',
-					});		
-					
-					MG.data_graphic({
-					title: "Bus Voltage (V)",
-					data: flight_data,
-					full_width:true,
-					height: 200,
-					//linked: true,
-					target: '#bus_voltage',
-					x_accessor: 'human_time',
-					y_accessor: 'bus_voltage',
-					});		
-					
-					MG.data_graphic({
-					title: "Fuel Flow (gph)",
-					data: flight_data,
-					full_width:true,
-					height: 200,
-					//linked: true,
-					target: '#fuel_flow',
-					x_accessor: 'human_time',
-					y_accessor: 'fuel_flow',
-					});	
-
-					MG.data_graphic({
-					title: "Outside Air Temp (F)",
-					data: flight_data,
-					full_width:true,
-					height: 200,
-					//linked: true,
-					target: '#OAT',
-					x_accessor: 'human_time',
-					y_accessor: 'OAT',
-					});	
-					
-					MG.data_graphic({
-					title: "Bus Current (A)",
-					data: flight_data,
-					full_width:true,
-					height: 200,
-					//linked: true,
-					target: '#bus_current',
-					x_accessor: 'human_time',
-					y_accessor: 'bus_current',
-					});	
-
-					MG.data_graphic({
-					title: "RPM",
-					data: flight_data,
-					full_width:true,
-					height: 200,
-					//linked: true,
-					target: '#RPM',
-					x_accessor: 'human_time',
-					y_accessor: 'RPM',
-					});				
-				
-				
-					MG.data_graphic({
-					title: "CPU Temp (F)",
-					data: flight_data,
-					full_width:true,
-					height: 200,
-					//linked: true,
-					target: '#t_cpu',
-					x_accessor: 'human_time',
-					y_accessor: 't_cpu',
-					});	
-					
-
-					
-					MG.data_graphic({
-					title: "FC Bit Error Metric",
-					data: flight_data,
-					full_width:true,
-					height: 200,
-					//linked: true,
-					target: '#fc_bit_error_rate',
-					x_accessor: 'human_time',
-					y_accessor: 'fc_bit_error_rate',
-					});		
-					
-					MG.data_graphic({
-					title: "Frame Index",
-					data: flight_data,
-					full_width:true,
-					height: 200,
-					//linked: true,
-					max_y:flight_data.length,
-					target: '#frame_index',
-					x_accessor: 'human_time',
-					y_accessor: 'frame_index',
-					});		
+					tlm_button.innerHTML='Refresh Telemetry';
 				}
 			};
 		xhr.open('GET', url);
