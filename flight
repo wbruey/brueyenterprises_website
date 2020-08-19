@@ -164,9 +164,11 @@
 
 
 
-
+<div id="press_altitude"></div>
 <div id="gear_up"></div>
-<div id="OAT"></div>
+<div id="TAS"></div>
+
+
 <div id="RPM"></div>
 <div id="CHTs"></div>
 <div id="EGTs"></div>
@@ -183,9 +185,6 @@
 <div id="bus_voltage"></div>
 <div id="bus_current"></div>
 
-<div id="press_altitude"></div>
-<div id="TAS"></div>
-
 <div id="pitch"></div>
 <div id="roll"></div>
 <div id="heading"></div>
@@ -194,7 +193,7 @@
 
 <div id="wind_speed"></div>
 <div id="wind_direction"></div>
-
+<div id="OAT"></div>
 
 <div id="tach_time"></div>
 <div id="hobbs_time"></div>
