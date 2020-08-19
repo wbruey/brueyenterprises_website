@@ -242,6 +242,26 @@ function list_of_flight_telem_files() {
 	});
 }
 
+function get_map_cord_object(flight_data){
+	map_cord_object={start_lat:'',start_lon:'',end_lat:'',end_lon:'',map_cords:[],bounds:new google.maps.LatLngBounds()};
+	found_first_point=0;
+	flight_data.forEach(function(data_point){
+		if (String(data_point['lat']).length>2){
+			if (found_first_point==0){
+				found_first_point=1;
+				map_cord_object['start_lat']=data_point['lat'];
+				map_cord_object['start_lon']=data_point['lon'];
+			}
+			map_cord_object['end_lat']=data_point['lat'];
+			map_cord_object['end_lon']=data_point['lon'];
+			map_cord_object['map_cords'].push({lat:data_point['lat'],lng:data_point['lon']});
+			loc = new google.maps.LatLng(data_point['lat'], data_point['lon']);
+			map_cord_object['bounds'].extend(loc);
+		}
+	});
+	return map_cord_object;
+}
+
 function processData(csv) {
 	var allTextLines = csv.split(/\r\n|\n/);
 	flight_data=[];
@@ -268,7 +288,7 @@ function processData(csv) {
 			}
 		}
 		flight_data.push(datapoint_object);
-	}	
+	}
 	return flight_data;
 
 }
@@ -295,6 +315,7 @@ function display_flight_telem(){
 		bus_voltage:{checkbox:'bus_voltage_box',title:'Bus Voltage (V)',target:'#bus_voltage',legend:'bus_voltage',y_accessor:'bus_voltage',html_id: bus_voltage},
 		bus_current:{checkbox:'bus_current_box',title:'Bus Current (A)',target:'#bus_current',legend:'bus_current',y_accessor:'bus_current',html_id: bus_current},
 		tach_time:{checkbox:'tach_time_box',title:'Tach Time (h)',target:'#tach_time',legend:'tach_time',y_accessor:'tach_time',html_id: tach_time},
+		hobbs_time:{checkbox:'hobbs_time_box',title:'Hobbs Time (h)',target:'#hobbs_time',legend:'hobbs_time',y_accessor:'hobbs_time',html_id: hobbs_time},
 		press_altitude:{checkbox:'press_altitude_box',title:'Pressure Altitude (ft)',target:'#press_altitude',legend:'press_altitude',y_accessor:'press_altitude',html_id: press_altitude},
 		TAS:{checkbox:'TAS_box',title:'True Airspeed (kts)',target:'#TAS',legend:'TAS',y_accessor:'TAS',html_id: TAS},
 		pitch:{checkbox:'pitch_box',title:'Pitch (deg)',target:'#pitch',legend:'pitch',y_accessor:'pitch',html_id: pitch},
@@ -330,35 +351,61 @@ function display_flight_telem(){
 					telem_ids_keys.forEach(function(telem_ids_key){
 						if(document.getElementById(telem_ids[telem_ids_key]['checkbox']).checked){
 							MG.data_graphic({
-							title: telem_ids[telem_ids_key]['title'],
-							data: flight_data,
-							full_width:true,
-							height:200,
-							//linked: true,
-							target: telem_ids[telem_ids_key]['target'],
-							x_accessor: 'human_time',
-							y_accessor: telem_ids[telem_ids_key]['y_accessor'],
+								title: telem_ids[telem_ids_key]['title'],
+								data: flight_data,
+								full_width:true,
+								height:200,
+								//linked: true,
+								target: telem_ids[telem_ids_key]['target'],
+								x_accessor: 'human_time',
+								y_accessor: telem_ids[telem_ids_key]['y_accessor'],
 							});		
 						}else{
 							telem_ids[telem_ids_key]['html_id'].innerHTML='';
 						}
 					});
+					MG.data_graphic({
+						title: 'Frame Index',
+						data: flight_data,
+						full_width:true,
+						height:200,
+						//linked: true,
+						target: '#frame_index',
+						x_accessor: 'human_time',
+						y_accessor: 'frame_index',
+					});	
+				
 
+					if(document.getElementById('map_box').checked){
+						map_cord_object=get_map_cord_object(flight_data);
+						var map = new google.maps.Map(document.getElementById("map"), {
+							center: {
+							  lat: map_cord_object['start_lat'],
+							  lng: map_cord_object['start_lon']
+							},
+							zoom: 8,
+							options: {
+								gestureHandling: 'greedy'
+							}
+						});
+						var flightPath = new google.maps.Polyline({
+							path: map_cord_object['map_cords'],
+							geodesic: true,
+							strokeColor: '#FF0000',
+							strokeOpacity: 1.0,
+							strokeWeight: 2
+						});
+						flightPath.setMap(map);
+						map.fitBounds(map_cord_object['bounds']);
+						map.panToBounds(map_cord_object['bounds']);
+					}
 					tlm_button.innerHTML='Refresh Telemetry';
+
 				}
+
 			};
 		xhr.open('GET', url);
 		xhr.send();	
-		});
-		map = new google.maps.Map(document.getElementById("map"), {
-			center: {
-			  lat: 40.8711946,
-			  lng: -74.2802352
-			},
-			zoom: 8,
-			options: {
-				gestureHandling: 'greedy'
-			}
 		});
 	}
 }
