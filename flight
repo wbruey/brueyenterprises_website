@@ -155,7 +155,10 @@
 
 <button class="block" onclick="display_flight_telem()" id="tlm_button">Load Telemetry</button>
 
+<!-- <button class="block" onclick="download_csv_telem()" id="download_button" style="display:none">Download Data as CSV</button> -->
 
+
+<a href='' id='download_button' style="display:none"><button class="block">Download Data as CSV</button></a>
 
 </head>
 
@@ -234,6 +237,11 @@ function list_of_flight_telem_files() {
 			flight_file_name=itemRef.name;
 			flight_name=flight_file_name.substring(0,flight_file_name.length-4);
 			flight_file_names.push(flight_file_name);
+		});
+		flight_file_names.sort();
+		flight_file_names.reverse();
+		flight_file_names.forEach(function(flight_file_name){
+			flight_name=flight_file_name.substring(0,flight_file_name.length-4);
 			flight_dropdown_html=flight_dropdown_html+'<option value="'+flight_file_name+'">'+flight_name+'</option>';
 		});
 		flights.innerHTML=flight_dropdown_html;
@@ -291,7 +299,21 @@ function processData(csv) {
 	return flight_data;
 
 }
-	
+
+/*
+function download_csv_telem(){
+	flight_file_name=drop_down.options[drop_down.selectedIndex].value;
+	if (flight_file_name.length>1){
+		download_button.innerHTML='Downloading....'
+		flight_telem_ref.child(flight_file_name).getDownloadURL().then(function(url){
+			
+		}
+	}
+}
+*/
+
+var csv_download_url=''
+
 function display_flight_telem(){
 
 	//button changes to say loading.
@@ -335,6 +357,7 @@ function display_flight_telem(){
 	if (flight_file_name.length>1){
 		tlm_button.innerHTML='Loading....'
 		flight_telem_ref.child(flight_file_name).getDownloadURL().then(function(url){
+			csv_download_url=url;
 			var xhr = new XMLHttpRequest();
 			xhr.responseType = 'blob';
 			xhr.onload = function(event) {
@@ -399,7 +422,12 @@ function display_flight_telem(){
 						map.panToBounds(map_cord_object['bounds']);
 					}
 					tlm_button.innerHTML='Refresh Telemetry';
-
+					document.getElementById("download_button").style.display = "block";
+					document.getElementById("download_button").onclick = function(){
+						this.href=csv_download_url;
+						//document.getElementById('download_button').innerHTML = '<a href="' + csv_download_url + '">' + 'Download Data as CSV' + '</a>';
+						console.log(this.href);
+					};
 				}
 
 			};
