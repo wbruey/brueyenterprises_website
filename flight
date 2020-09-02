@@ -162,7 +162,7 @@ input:checked + .slider:before {
   <tr>
     <td><input type="checkbox" id="map_box" >Map</td>
     <td><input type="checkbox" id="gear_up_box" >Gear Status</td>
-    <td><input type="checkbox" id="OAT_box" >Outter Air Temp</td>
+    <td><input type="checkbox" id="OAT_box" >Outside Air Temp</td>
   </tr>
   <tr>
     <td><input type="checkbox" id="RPM_box" >RPM</td>
@@ -313,7 +313,7 @@ function autoclick(){
 		roll:{checkbox:'roll_box',title:'Roll (deg)',target:'#roll',legend:'roll',y_accessor:'roll',html_id: roll},
 		heading:{checkbox:'heading_box',title:'Magnetic Heading (deg)',target:'#heading',legend:'heading',y_accessor:'heading',html_id: heading},
 		vertical_gs:{checkbox:'vertical_gs_box',title:'Vertical Gs',target:'#vertical_gs',legend:'vertical_gs',y_accessor:'vertical_gs',html_id: vertical_gs},
-		vertical_speed:{checkbox:'vertical_speed_box',title:'Vertical Speed (ft/s)',target:'#vertical_speed',legend:'vertical_speed',y_accessor:'vertical_speed',html_id: vertical_speed},
+		vertical_speed:{checkbox:'vertical_speed_box',title:'Vertical Speed (ft/min)',target:'#vertical_speed',legend:'vertical_speed',y_accessor:'vertical_speed',html_id: vertical_speed},
 		wind_speed:{checkbox:'wind_speed_box',title:'Wind Speed (kts)',target:'#wind_speed',legend:'wind_speed',y_accessor:'wind_speed',html_id: wind_speed},
 		wind_direction:{checkbox:'wind_direction_box',title:'Wind Direction (deg magnetic)',target:'#wind_direction',legend:'wind_direction',y_accessor:'wind_direction',html_id: wind_direction},
 	};
@@ -479,6 +479,7 @@ function display_flight_telem(){
 								title: telem_ids[telem_ids_key]['title'],
 								data: flight_data,
 								full_width:true,
+								min_y_from_data: true,
 								height:200,
 								//linked: true,
 								target: telem_ids[telem_ids_key]['target'],
