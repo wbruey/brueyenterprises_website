@@ -489,6 +489,7 @@ function display_flight_telem(){
 							telem_ids[telem_ids_key]['html_id'].innerHTML='';
 						}
 					});
+/*
 					MG.data_graphic({
 						title: 'Frame Index',
 						data: flight_data,
@@ -499,7 +500,7 @@ function display_flight_telem(){
 						x_accessor: 'human_time',
 						y_accessor: 'frame_index',
 					});	
-				
+*/				
 
 					if(document.getElementById('map_box').checked){
 						document.getElementById("map").style.display = "block";
