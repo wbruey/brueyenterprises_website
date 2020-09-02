@@ -280,9 +280,9 @@ function processData(csv) {
 		datapoint_object={};
 		var telem_row=allTextLines[i].split(',');	
 		for (var j=0; j<telem_row.length; j++){
-			if (telem_row[j]=='True'){
+			if (telem_row[j].includes('TRUE')||telem_row[j]=='True'){
 				datapoint_object[csv_columns[j]]=1;
-			}else if (telem_row[j]=='False'){
+			}else if (telem_row[j].includes('FALSE')||telem_row[j]=='False'){
 				datapoint_object[csv_columns[j]]=0;
 			}else{
 				datapoint_object[csv_columns[j]]=Number(telem_row[j]);
@@ -367,7 +367,7 @@ function display_flight_telem(){
 				reader.onload=function loadHandler(event){
 					var csv = event.target.result;
 					flight_data=processData(csv); 
-					//console.log(flight_data);
+					console.log(flight_data);
 
 					telem_ids_keys=Object.keys(telem_ids);
 					telem_ids_keys.forEach(function(telem_ids_key){
