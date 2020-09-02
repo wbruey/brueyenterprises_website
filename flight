@@ -67,7 +67,65 @@
 .select-css option {
 	font-weight:normal;
 }
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
 
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
 </style>
 
 
@@ -86,65 +144,65 @@
 <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCMPbs-XBKLb_odiPtzXUY1rt5tV4x8Wbc&libraries=&v=weekly" defer></script>
 
-
-
-
-
 <div id="flight_selector"> 
 	<label for="flights"></label>
 	<select name="flights" id="flights" class="select-css">
 	</select>
 </div>
 
-
-
+<div  style="transform: translate(48%, 0%)">
+	<label class="switch">
+	  <input type="checkbox" id="all_tlm" onclick="autoclick()">
+	  <span class="slider round"></span>
+	</label>
+</div>
 
 <div id="radio_buttons">
 <table style="transform: translate(10%, 0%);width:90% ">
   <tr>
-    <td><input type="checkbox" id="map_box" checked>Map</td>
-    <td><input type="checkbox" id="gear_up_box" checked>Gear Status</td>
-    <td><input type="checkbox" id="OAT_box" checked>Outter Air Temp</td>
+    <td><input type="checkbox" id="map_box" >Map</td>
+    <td><input type="checkbox" id="gear_up_box" >Gear Status</td>
+    <td><input type="checkbox" id="OAT_box" >Outter Air Temp</td>
   </tr>
   <tr>
-    <td><input type="checkbox" id="RPM_box" checked>RPM</td>
-    <td><input type="checkbox" id="CHTs_box" checked>CHTs</td>
-    <td><input type="checkbox" id="EGTs_box" checked>EGTs</td>
+    <td><input type="checkbox" id="RPM_box" >RPM</td>
+    <td><input type="checkbox" id="CHTs_box" >CHTs</td>
+    <td><input type="checkbox" id="EGTs_box" >EGTs</td>
   </tr>
   <tr>
-    <td><input type="checkbox" id="fuel_flow_box" checked>Fuel Flow</td>
-    <td><input type="checkbox" id="manifold_pressure_box" checked>Manifold Pressure</td>
-    <td><input type="checkbox" id="oil_temp_box" checked>Oil Temp</td>
+    <td><input type="checkbox" id="fuel_flow_box" >Fuel Flow</td>
+    <td><input type="checkbox" id="manifold_pressure_box" >Manifold Pressure</td>
+    <td><input type="checkbox" id="oil_temp_box" >Oil Temp</td>
   </tr>
   <tr>
-    <td><input type="checkbox" id="oil_pressure_box" checked>Oil Pressure</td>
-    <td><input type="checkbox" id="fuel_pressure_box" checked>Fuel Pressure</td>
-    <td><input type="checkbox" id="t_cpu_box" checked>CPU Temp</td>
+    <td><input type="checkbox" id="oil_pressure_box" >Oil Pressure</td>
+    <td><input type="checkbox" id="fuel_pressure_box" >Fuel Pressure</td>
+    <td><input type="checkbox" id="t_cpu_box" >CPU Temp</td>
   </tr>
   <tr>
-    <td><input type="checkbox" id="fc_RSSI_box" checked>Modem RSSI</td>
-    <td><input type="checkbox" id="fc_bit_error_rate_box" checked>Modem Bit Error Rate</td>
-    <td><input type="checkbox" id="bus_voltage_box" checked>Bus Voltage</td>
+    <td><input type="checkbox" id="fc_RSSI_box" >Modem RSSI</td>
+    <td><input type="checkbox" id="fc_bit_error_rate_box" >Modem Bit Error Rate</td>
+    <td><input type="checkbox" id="bus_voltage_box" >Bus Voltage</td>
   </tr>
   <tr>
-    <td><input type="checkbox" id="bus_current_box" checked>Bus Current</td>
-    <td><input type="checkbox" id="tach_time_box" checked>Tach Time</td>
-    <td><input type="checkbox" id="hobbs_time_box" checked>Hobbs Time</td>
+    <td><input type="checkbox" id="bus_current_box" >Bus Current</td>
+    <td><input type="checkbox" id="tach_time_box" >Tach Time</td>
+    <td><input type="checkbox" id="hobbs_time_box" >Hobbs Time</td>
   </tr>
   <tr>
-    <td><input type="checkbox" id="press_altitude_box" checked>Pressure Altitude</td>
-    <td><input type="checkbox" id="TAS_box" checked>True Airspeed</td>
-    <td><input type="checkbox" id="pitch_box" checked>Pitch</td>
+    <td><input type="checkbox" id="press_altitude_box" >Pressure Altitude</td>
+    <td><input type="checkbox" id="TAS_box" >True Airspeed</td>
+    <td><input type="checkbox" id="pitch_box" >Pitch</td>
   </tr>
   <tr>
-    <td><input type="checkbox" id="roll_box" checked>Roll</td>
-    <td><input type="checkbox" id="heading_box" checked>Heading</td>
-    <td><input type="checkbox" id="vertical_gs_box" checked>Vertical Gs</td>
+    <td><input type="checkbox" id="roll_box" >Roll</td>
+    <td><input type="checkbox" id="heading_box" >Heading</td>
+    <td><input type="checkbox" id="vertical_gs_box" >Vertical Gs</td>
   </tr>
   <tr>
-    <td><input type="checkbox" id="vertical_speed_box" checked>Vertical Speed</td>
-    <td><input type="checkbox" id="wind_speed_box" checked>Wind Speed</td>
-    <td><input type="checkbox" id="wind_direction_box" checked>Wind Direction</td>
+    <td><input type="checkbox" id="vertical_speed_box" >Vertical Speed</td>
+    <td><input type="checkbox" id="wind_speed_box" >Wind Speed</td>
+    <td><input type="checkbox" id="wind_direction_box" >Wind Direction</td>
   </tr>
 
 </table>
@@ -207,6 +265,7 @@
 
   
 <script type="text/javascript">
+
 //data=[];
 
 const firebaseConfig = {
@@ -227,6 +286,50 @@ var database = firebase.database();
 var storage = firebase.storage();
 var storageRef = storage.ref();
 var flight_telem_ref=storageRef.child('flight_telem');
+
+function autoclick(){
+	console.log('check all clicked');
+	telem_ids={
+		gear_up:{checkbox:'gear_up_box',title:'Gear Up',target:'#gear_up',legend:'Gear',y_accessor:'gear_up',html_id: gear_up},
+		OAT:{checkbox:'OAT_box',title:'Outside Air Temp (F)',target:'#OAT',legend:'OAT',y_accessor:'OAT',html_id: OAT},
+		RPM:{checkbox:'RPM_box',title:'RPM',target:'#RPM',legend:'RPM',y_accessor:'RPM',html_id: RPM},
+		CHTs:{checkbox:'CHTs_box',title:'Cylinder Head Temps (F)',target:'#CHTs',legend:['CHT1','CHT2','CHT3','CHT4'],y_accessor:['CHT1','CHT2','CHT3','CHT4'],html_id: CHTs},
+		EGTs:{checkbox:'EGTs_box',title:'Exaust Gas Temps (F)',target:'#EGTs',legend:['EGT1','EGT2','EGT3','EGT4'],y_accessor:['EGT1','EGT2','EGT3','EGT4'],html_id: EGTs},
+		fuel_flow:{checkbox:'fuel_flow_box',title:'Fuel Flow (gph)',target:'#fuel_flow',legend:'fuel_flow',y_accessor:'fuel_flow',html_id: fuel_flow},
+		manifold_pressure:{checkbox:'manifold_pressure_box',title:'Manifold Pressure (psi)',target:'#manifold_pressure',legend:'manifold_pressure',y_accessor:'manifold_pressure',html_id: manifold_pressure},
+		oil_temp:{checkbox:'oil_temp_box',title:'Oil Temp (F)',target:'#oil_temp',legend:'oil_temp',y_accessor:'oil_temp',html_id: oil_temp},
+		oil_pressure:{checkbox:'oil_pressure_box',title:'Oil Pressure (psi)',target:'#oil_pressure',legend:'oil_pressure',y_accessor:'oil_pressure',html_id: oil_pressure},
+		fuel_pressure:{checkbox:'fuel_pressure_box',title:'Fuel Pressure (psi)',target:'#fuel_pressure',legend:'fuel_pressure',y_accessor:'fuel_pressure',html_id: fuel_pressure},
+		t_cpu:{checkbox:'t_cpu_box',title:'CPU Temp (F)',target:'#t_cpu',legend:'t_cpu',y_accessor:'t_cpu',html_id: t_cpu},
+		fc_RSSI:{checkbox:'fc_RSSI_box',title:'Modem RSSI',target:'#fc_RSSI',legend:'fc_RSSI',y_accessor:'fc_RSSI',html_id: fc_RSSI},
+		fc_bit_error_rate:{checkbox:'fc_bit_error_rate_box',title:'Modem Bit Error Rate Metric',target:'#fc_bit_error_rate',legend:'fc_bit_error_rate',y_accessor:'fc_bit_error_rate',html_id: fc_bit_error_rate},
+		bus_voltage:{checkbox:'bus_voltage_box',title:'Bus Voltage (V)',target:'#bus_voltage',legend:'bus_voltage',y_accessor:'bus_voltage',html_id: bus_voltage},
+		bus_current:{checkbox:'bus_current_box',title:'Bus Current (A)',target:'#bus_current',legend:'bus_current',y_accessor:'bus_current',html_id: bus_current},
+		tach_time:{checkbox:'tach_time_box',title:'Tach Time (h)',target:'#tach_time',legend:'tach_time',y_accessor:'tach_time',html_id: tach_time},
+		hobbs_time:{checkbox:'hobbs_time_box',title:'Hobbs Time (h)',target:'#hobbs_time',legend:'hobbs_time',y_accessor:'hobbs_time',html_id: hobbs_time},
+		press_altitude:{checkbox:'press_altitude_box',title:'Pressure Altitude (ft)',target:'#press_altitude',legend:'press_altitude',y_accessor:'press_altitude',html_id: press_altitude},
+		TAS:{checkbox:'TAS_box',title:'True Airspeed (kts)',target:'#TAS',legend:'TAS',y_accessor:'TAS',html_id: TAS},
+		pitch:{checkbox:'pitch_box',title:'Pitch (deg)',target:'#pitch',legend:'pitch',y_accessor:'pitch',html_id: pitch},
+		roll:{checkbox:'roll_box',title:'Roll (deg)',target:'#roll',legend:'roll',y_accessor:'roll',html_id: roll},
+		heading:{checkbox:'heading_box',title:'Magnetic Heading (deg)',target:'#heading',legend:'heading',y_accessor:'heading',html_id: heading},
+		vertical_gs:{checkbox:'vertical_gs_box',title:'Vertical Gs',target:'#vertical_gs',legend:'vertical_gs',y_accessor:'vertical_gs',html_id: vertical_gs},
+		vertical_speed:{checkbox:'vertical_speed_box',title:'Vertical Speed (ft/s)',target:'#vertical_speed',legend:'vertical_speed',y_accessor:'vertical_speed',html_id: vertical_speed},
+		wind_speed:{checkbox:'wind_speed_box',title:'Wind Speed (kts)',target:'#wind_speed',legend:'wind_speed',y_accessor:'wind_speed',html_id: wind_speed},
+		wind_direction:{checkbox:'wind_direction_box',title:'Wind Direction (deg magnetic)',target:'#wind_direction',legend:'wind_direction',y_accessor:'wind_direction',html_id: wind_direction},
+	};
+	telem_ids_keys=Object.keys(telem_ids);
+	if(document.getElementById('all_tlm').checked){
+		telem_ids_keys.forEach(function(telem_ids_key){
+			document.getElementById(telem_ids[telem_ids_key]['checkbox']).checked=true;
+		});
+		document.getElementById('map_box').checked=true
+	}else{
+		telem_ids_keys.forEach(function(telem_ids_key){
+			document.getElementById(telem_ids[telem_ids_key]['checkbox']).checked=false;
+		});
+		document.getElementById('map_box').checked=false
+	}
+}
 
 //get the list of telem_files from firebase storage and populate the user dropdown
 function list_of_flight_telem_files() {
@@ -399,6 +502,7 @@ function display_flight_telem(){
 				
 
 					if(document.getElementById('map_box').checked){
+						document.getElementById("map").style.display = "block";
 						map_cord_object=get_map_cord_object(flight_data);
 						var map = new google.maps.Map(document.getElementById("map"), {
 							center: {
@@ -420,6 +524,8 @@ function display_flight_telem(){
 						flightPath.setMap(map);
 						map.fitBounds(map_cord_object['bounds']);
 						map.panToBounds(map_cord_object['bounds']);
+					}else{
+						document.getElementById("map").style.display = "none";
 					}
 					tlm_button.innerHTML='Refresh Telemetry';
 					document.getElementById("download_button").style.display = "block";
