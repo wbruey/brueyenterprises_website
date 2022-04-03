@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>K+W 4Eva</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<style>
+body,h1,h2{font-family: "Lucida Bright", sans-serif}
+body, html {height: 100%}
+p {line-height: 2}
+.bgimg, .bgimg2 {
+  min-height: 100%;
+  background-position: center;
+  background-size: cover;
+}
+.bgimg {background-image: url("/w3images/wedding_couple.jpg")}
+.bgimg2 {background-image: url("/w3images/flowers.jpg")}
+
+table {
+  font-family: "Lucida Bright", sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #C79F57;
+  border: none;
+  text-align: center;
+  padding: 8px;
+}
+
+</style>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+<script type='text/javascript' src='d3.js'></script>
+<script src="https://www.gstatic.com/firebasejs/7.17.2/firebase.js"></script>
+
+
+
+</head>
+<body>
+
+<!-- Header / Home-->
+<header class="w3-display-container w3-wide bgimg" id="home">
+  <div class="w3-display-top w3-text-black w3-center">
+    <h1 class="w3-jumbo">Kelsey<br>& Will</h1>
+	<h2><b>Sept 17th, 2022</b></h2>
+<!--     <h2><b><a href="#itinerary">Itinerary</a></b></h2>
+	<h2><b><a href="#RSVP">RSVP</a></b></h2>
+	<h2><b><a href="#RSVP">The Vibe</a></b></h2>
+	<h2><b><a href="#RSVP">Romantic Stuff</a></b></h2>
+	<h2><b><a href="#RSVP">Travel Logistics</a></b></h2>
+	<h2><b><a href="#RSVP">Regestry</a></b></h2> -->
+	<img src="roomCrop.jpg" alt="Kelsey and Will" width="50%">
+
+  </div>
+</header>
+
+<!-- Navbar (sticky bottom) -->
+<div class="w3-bottom">
+  <div class="w3-bar w3-white w3-center w3-padding w3-opacity-min w3-hover-opacity-off">
+    <a href="#Events" style="width:18%" class="w3-bar-item w3-button"><u>Events</u></a>
+    <a onclick="document.getElementById('id01').style.display='block'" style="width:16%" class="w3-bar-item w3-button"><u>RSVP</u></a>
+    <a href="#Vibe" style="width:14%" class="w3-bar-item w3-button"><u>Vibe</u></a>
+    <a href="#Love" style="width:14%" class="w3-bar-item w3-button"><u>Love</u></a>
+	<a href="#Logistics" style="width:22%" class="w3-bar-item w3-button"><u>Logistics</u></a>
+	<a href="gifts.html" style="width:16%" class="w3-bar-item w3-button"><u>Gifts</u></a>
+  </div>
+</div>
+
+
+
+<div id="Events">
+<table>
+
+  <tr  style="color:#85969D;background-color:#D3DCE5">
+	<th style="padding: 0px"><h2>Welcome Drinks - Friday Sept 16th</h2></th>
+  </tr>
+  
+  <tr><td>
+    <table>
+	<tr style="text-align: center;background-color:#FFFFFF">
+		<td style="text-align: right"><b>7pm</b> Marina Courtyard</td><td style="text-align: left"><img src="gMaps.png" alt="Go!" height="30"><a href="https://goo.gl/maps/YRvDu61y43xryJmV9">DoubleTree San Pedro</a></td>
+	</tr>
+	</table>
+  </td></tr>
+ 
+   <tr>
+	<td style="text-align: center;background-color:#FFFFFF">
+	<a target="_blank" href="https://www.google.com/calendar/render?action=TEMPLATE&text=Welcome+Drinks+-+Kelsey+and+Will%27s+Wedding&details=Meet+us+in+the+%22Marina+Courtyard%22+of+the+DoubleTree+hotel+in+San+Pedro&location=2800+Via+Cabrillo+Marina+San+Pedro%2C+California+90731&dates=20220917T020000Z%2F20220917T060000Z"><img border="0" src="https://www.google.com/calendar/images/ext/gc_button1_en.gif"></a>
+	<a target="_blank" href="Welcome_Drinks.ics"><img border="0" src="ical2.jpg"></a>
+	</td>
+	</tr>
+ 
+ 
+  	<tr style="text-align: center;background-color:#FFFFFF">
+		<td><img src="marinaCourtyard2.png" alt="Marina Courtyard" width="100%"></td>
+	</tr>
+	
+  <tr  style="color:#85969D;background-color:#D3DCE5">
+	<th style="padding: 0px"><h2>The Main Event - Saturday Sept 17th</h2></th>
+  </tr>
+  
+  <tr><td>
+    <table>
+	<tr style="text-align: center;background-color:#FFFFFF">
+		<td style="text-align: right"><b>10:00am</b> Ceremony</td><td style="text-align: left"><img src="gMaps.png" alt="Go!" height="30"><a href="https://goo.gl/maps/e3F6XndX8XqSA8SF6">Wayfarers Chapel</a></td>
+	</tr>
+	<tr style="text-align: center;background-color:#FFFFFF">
+		<td style="text-align: right"><b>3:30pm</b> Reception</td><td style="text-align: left"><img src="gMaps.png" alt="Go!" height="30"><a href="https://goo.gl/maps/d6MGj7RbYRRZS5xc7">Catalina View Gardens</a></td>
+	</tr>	
+	</table>
+  </td></tr>
+
+   <tr>
+	<td style="text-align: center;background-color:#FFFFFF">
+	<a target="_blank" href="https://www.google.com/calendar/render?action=TEMPLATE&text=Kelsey+and+Wills+Wedding&details=Arrive+at+Wayfarers+Chapel+at+9%3A45am+for+a+Ceremony+Start+time+of+10am.++Kelsey+will+be+walking+down+the+isle+then+so+don%27t+be+late.%0A%0AThe+ceremony+will+last+about+30-45+minutes%2C+then+everyone+is+free+for+brunch.++Reconvene+at+Catalina+View+Gardens+for+the+reception+at+3%3A30pm+to+dance+the+afternoon+away.+%0A%0ACeremony+address+is+at+%0AWayfarers+Chapel+5755+Palos+Verdes+Dr+S%2C+Rancho+Palos%0A%0ACatalina+View+Gardens+Reception+address+%28just+a+few+minutes+from+the+chapel%29+is+at%0A6001+Palos+Verdes+Dr+S%2C+Rancho+Palos+Verdes%2C+CA+90275&location=5755+Palos+Verdes+Dr+SRancho+Palos+Verdes%2C+CA+90275&dates=20220917T164500Z%2F20220918T060000Z"><img border="0" src="https://www.google.com/calendar/images/ext/gc_button1_en.gif"></a>
+	<a target="_blank" href="Wedding.ics"><img border="0" src="ical2.jpg"></a>
+	</td>
+	</tr>
+	
+	
+  	<tr style="text-align: center;background-color:#FFFFFF">
+		<td><img src="chapel.jpg" alt="Chapel" width="100%"></td>
+	</tr>  
+
+  <tr  style="color:#85969D;background-color:#D3DCE5">
+	<th style="padding: 0px"><h2>Sunday Sept 18th</h2></th>
+  </tr>
+
+<tr style="text-align: center;background-color:#FFFFFF">
+	<td><b>No events, we'll be sick of you by Sunday.</td>
+</tr>
+
+  	<tr style="text-align: center;background-color:#FFFFFF">
+		<td><img src="hawaii.jpg" alt="PostCard" width="50%"></td>
+	</tr>  
+
+</table>
+
+
+
+
+<!-- About / Jane And John -->
+<div class="w3-container w3-padding-64" id="Love">
+  <div class="w3-content"  style="background-color:#DED9CA">
+    <h2 class="w3-center"><b>Kelsey & Will</b></h2>
+	<p class="w3-center"><i>Cue the obnoxious romance home movies!</i></p>
+	<video width="100%" poster="usInPlane.jpg"controls>
+	  <source src="weddingVideo.mp4" type="video/mp4">
+	</video>
+    </p>
+  </div>
+</div>
+
+<!-- About / Jane And John -->
+<div class="w3-container" id="Vibe">
+  <div class="w3-content"  style="background-color:#D3DCE5">
+    <h2 class="w3-center"><b>The Vibe</b></h2>
+	<p class="w3-center"><i>Vacation weekend with a garden party.<br>Formal attire, tuxidos and long dresses welcome!</i></p>
+    <img class="w3-round" src="formal.jpg" style="width:50%;filter:grayscale(100%)"><img class="w3-round" src="gardenParty3.jpg" style="width:50%;filter:grayscale(100%)">
+  </div>
+</div>
+
+
+<!-- Background photo -->
+<!-- <div class="w3-display-container bgimg2">
+  <div class="w3-display-middle w3-text-white w3-center">
+    <h1 class="w3-jumbo">You Are Invited</h1><br>
+    <h2>Of course..</h2>
+  </div>
+</div> -->
+
+
+
+<!-- RSVP section -->
+<div class="w3-container w3-center w3-wide" id="RSVP">
+  <div class="w3-content"  style="background-color:#DED9CA">
+  <br>
+  <p class="w3-xlarge">
+    <button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-round w3-opacity w3-hover-opacity-off" style="border:2px solid black; padding:8px 60px;background-color:#85969D;color:#FFFFFF">RSVP</button>
+  </p>
+  <br>
+  <br>
+  <br>
+  </div>
+</div>
+
+<!-- RSVP modal -->
+<div id="id01" class="w3-modal">
+  <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="padding:32px;max-width:600px">
+    <div class="w3-container w3-white w3-center">
+	  <span onclick="document.getElementById('id01').style.display='none'"
+      class="w3-button w3-display-topright">&times;</span>
+      <h1 class="w3-wide">Write an RSVP note.</h1>
+	  </p>
+	  <form action="/action_page.php">
+	  <label for="fname">Name(s)</label>
+	  <input type="text" id="Names" name="Names" size="40"><br>
+	  </form>
+	  <p id="q3"><i>Will you be staying at<br><b>San Pedro DoubleTree Hotel?</b></i></p>	 
+      <div class="w3-row">
+        <div class="w3-half">
+         <button onclick="appendRow('Yes to DoubleTree Hotel.')" id="yesHotel" type="button" class="w3-button w3-block" style="border:2px solid black; padding:8px 60px;background-color:#DED9CA;color:#000000">Probably.</button>
+        </div>
+        <div class="w3-half">
+          <button onclick="appendRow('No to DoubleTree Hotel.')" id="noHotel" type="button" class="w3-button w3-block" style="border:2px solid black; padding:8px 60px;background-color:#85969D;color:#FFFFFF">Probably not.</button>
+        </div>
+      </div>	
+      <p id="q1" ><i>Will you be attending the<br><b>Welcome drinks on Friday?</b></i></p>
+      <div class="w3-row">
+        <div class="w3-half">
+          <button onclick="appendRow('Yes to welcome drinks.')" id="yesDrinks" type="button" class="w3-button w3-block" style="border:2px solid black; padding:8px 60px;background-color:#DED9CA;color:#000000">We'll be there!</button>
+        </div>
+        <div class="w3-half">
+          <button onclick="appendRow('No to welcome drinks.')" id="noDrinks" type="button" class="w3-button w3-block" style="border:2px solid black; padding:8px 60px;background-color:#85969D;color:#FFFFFF">Can't make it.</button>
+        </div>
+      </div>	 
+	  <p id="q2"><i>Will you be attending the<br><b>Wedding on Saturday</b></i></p>	 
+      <div class="w3-row">
+        <div class="w3-half">
+         <button onclick="appendRow('Yes to Wedding.')" id="yesWedding" type="button" class="w3-button w3-block" style="border:2px solid black; padding:8px 60px;background-color:#DED9CA;color:#000000">We'll be there!</button>
+        </div>
+        <div class="w3-half">
+          <button onclick="appendRow('We plan on missing the wedding of the year.')" id="noWedding" type="button" class="w3-button w3-block" style="border:2px solid black; padding:8px 60px;background-color:#85969D;color:#FFFFFF">Can't make it.</button>
+        </div>
+      </div>	
+	  
+  
+	  <div id="foods">
+	  <p><i>Please add meals to your party</i></p>
+	  <button onclick="appendRow('+ Fish.')" id="food1" type="button" class="w3-button w3-block" style="border:2px solid black; padding:8px 60px;background-color:#DED9CA;color:#000000">Add +1 Meal of Fish</button>
+	  <br>
+	  <button onclick="appendRow('+ Beef.')" id="food2" type="button" class="w3-button w3-block" style="border:2px solid black; padding:8px 60px;background-color:#DED9CA;color:#000000">Add +1 Meal of Beef</button>
+	  <br>
+	  <button onclick="appendRow('+ Vegan.')" id="food3" type="button" class="w3-button w3-block" style="border:2px solid black; padding:8px 60px;background-color:#DED9CA;color:#000000">Add +1 Meal of Vegan</button>
+	  <br>
+	  <button onclick="appendRow('+ Other Meal')" id="food4" type="button" class="w3-button w3-block" style="border:2px solid black; padding:8px 60px;background-color:#DED9CA;color:#000000">Add +1 Meal of Other</button>
+      </div>
+	  <p id='deads' style="visibility:hidden"><b>You are dead to us!</b></p>
+	  <form>
+		<textarea style="color:#85969D" id="RSVPnote" rows="10" cols="40">Dear Will and Kelsey,</textarea>
+      </form>
+	  <button onclick="finishRSVP(SendRSVP)" id="sendRSVPnow" type="button" class="w3-button w3-block" style="border:2px solid black; padding:8px 60px;background-color:#C0944B;color:#FFFFFF">Submit RSVP Note</button>
+	  
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+
+function appendRow(inputText)
+{
+   var d = document.getElementById('RSVPnote');
+   d.value += "\n"+inputText;
+	
+	console.log(inputText=='Yes to welcome drinks.');
+	
+	if (inputText=='Yes to welcome drinks.'){
+		document.getElementById('q1').innerHTML='Yay! See you at drinks!';
+	}
+	
+	if (inputText=='No to welcome drinks.'){
+		document.getElementById('q1').innerHTML='Bummer, we will miss you!';
+	}
+	
+	if (inputText=='Yes to Wedding.'){
+		document.getElementById('q2').innerHTML='Yay! See you at the wedding!';
+	}
+	
+	if (inputText=='We plan on missing the wedding of the year.'){
+		document.getElementById('q2').innerHTML='<b>Scroll down so we can have a word with you....</b>';
+		document.getElementById('foods').style.visibility='hidden';
+		document.getElementById('deads').style.visibility='visible';
+	}
+
+	if (inputText=='Yes to DoubleTree Hotel.'){
+		document.getElementById('q3').innerHTML='Yay! See you at the hotel!';
+	}
+	
+	if (inputText=='No to DoubleTree Hotel.'){
+		document.getElementById('q3').innerHTML='No hotel, got it.';
+	}
+	
+	
+	if (inputText=='Yes to welcome drinks.'||inputText=='No to welcome drinks.') {
+	  document.getElementById('yesDrinks').style.visibility='hidden';
+	  document.getElementById('noDrinks').style.visibility='hidden';
+	}
+
+	if (inputText=='Yes to Wedding.'||inputText=='We plan on missing the wedding of the year.') {
+	  document.getElementById('yesWedding').style.visibility='hidden';
+	  document.getElementById('noWedding').style.visibility='hidden';
+	}	
+	
+	if (inputText=='Yes to DoubleTree Hotel.'||inputText=='No to DoubleTree Hotel.') {
+	  document.getElementById('yesHotel').style.visibility='hidden';
+	  document.getElementById('noHotel').style.visibility='hidden';
+	}		
+	
+}
+
+finishRSVP = function (callback)
+{
+	var rsvpButton = document.getElementById('sendRSVPnow');
+	rsvpButton.innerHTML='Sending';
+	
+	var namesField = document.getElementById('Names');
+	var d = document.getElementById('RSVPnote');
+	d.value += "\nSincerely,\n"+namesField.value;	
+	
+	setTimeout(()=> {rsvpButton.innerHTML='Sending.';},1000);
+	setTimeout(()=> {rsvpButton.innerHTML='Sending..';},2000);
+	setTimeout(()=> {rsvpButton.innerHTML='Sending...';},3000);
+	setTimeout(callback(goHome),4000);
+
+}
+
+SendRSVP = function (callback)
+{
+	
+
+	
+	var d = document.getElementById('RSVPnote');
+	console.log(d.value)
+	
+	var xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = function(){
+        if (xhr.readyState == 4 && xhr.status == 200)
+        {
+            callback(); // Another callback here
+        }	
+	}
+	xhr.open("POST", 'https://us-central1-brutest2-62192.cloudfunctions.net/textBru', true);
+	xhr.setRequestHeader('Content-Type', 'application/json');
+	xhr.send(JSON.stringify({
+    sms_message: d.value
+	}));
+	
+	
+	
+}
+
+function goHome() {
+   
+   window.location.href = 'sentRSVP.html';	
+}
+
+</script>
+
+</body>
+</html>
