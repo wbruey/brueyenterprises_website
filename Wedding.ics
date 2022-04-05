@@ -23,16 +23,16 @@ RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU
 END:STANDARD
 END:VTIMEZONE
 BEGIN:VEVENT
-DTSTAMP:20220403T152954Z
+DTSTAMP:20220403T230131Z
 UID:1648958575843-27091@ical.marudot.com
 DTSTART;TZID=America/Los_Angeles:20220917T094500
-DTEND;TZID=America/Los_Angeles:20220917T220000
-SUMMARY:Kelsey and Wills Wedding
+DTEND;TZID=America/Los_Angeles:20220917T213000
+SUMMARY:Kelsey and Will's Wedding
 DESCRIPTION:Arrive at Wayfarers Chapel at 9:45am for a Ceremony Start time of 10am.  Kelsey will be walking down the isle then so don't be late.\n\nThe ceremony will last about 30-45 minutes\, then everyone is free for brunch.  Reconvene at Catalina View Gardens for the reception at 3:30pm to dance the afternoon away. \n\nCeremony address is at \nWayfarers Chapel 5755 Palos Verdes Dr S\, Rancho Palos\n\nCatalina View Gardens Reception address (just a few minutes from the chapel) is at\n6001 Palos Verdes Dr S\, Rancho Palos Verdes\, CA 90275\n\n\n
 LOCATION:5755 Palos Verdes Dr S\, Rancho Palos
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Kelsey and Wills Wedding
+DESCRIPTION:Kelsey and Will's Wedding
 TRIGGER:-PT1H
 END:VALARM
 END:VEVENT
