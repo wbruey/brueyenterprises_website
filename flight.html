@@ -1,0 +1,606 @@
+<html>
+<style>
+/*MAP==========================*/
+#map {
+  height: 50%;
+}
+/*BUTTON==========================*/
+.block {
+  display: block;
+  width: 90%;
+  background-color: #0075FF;
+  color: white;
+  padding: 14px 28px;
+  font-size: 16px;
+  font-family: sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  margin: 10;
+  transform: translate(5%, 0%);
+  border-radius: .5em;
+}
+.block:hover {
+  background-color: #ddd;
+  color: black;
+}
+/*DROP DOWN==========================*/
+.select-css {
+	transform: translate(115%, 0%);
+	display: block;
+	font-size: 16px;
+	font-family: sans-serif;
+	font-weight: 700;
+	color: #444;
+	line-height: 1.3;
+	padding: .6em 1.4em .5em .8em;
+	width: 30%;
+	max-width: 30%;
+	box-sizing: border-box;
+	margin: 10;
+	border: 1px solid #aaa;
+	box-shadow: 0 1px 0 1px rgba(0,0,0,.04);
+	border-radius: .5em;
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	appearance: none;
+	background-color: #fff;
+	background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'),
+	  linear-gradient(to bottom, #ffffff 0%,#e5e5e5 100%);
+	background-repeat: no-repeat, repeat;
+	background-position: right .7em top 50%, 0 0;
+	background-size: .65em auto, 100%;
+}
+.select-css::-ms-expand {
+	display: none;
+}
+.select-css:hover {
+	border-color: #888;
+}
+.select-css:focus {
+	border-color: #aaa;
+	box-shadow: 0 0 1px 3px rgba(59, 153, 252, .7);
+	box-shadow: 0 0 0 3px -moz-mac-focusring;
+	color: #222;
+	outline: none;
+}
+.select-css option {
+	font-weight:normal;
+}
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+</style>
+
+
+<head>
+<h1 style="margin:10;font-weight: 700;text-align:center; font-family:sans-serif"> N171ML Flight Telemetry</h1>
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+<link href="https://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet" type="text/css">
+<script type='text/javascript' src='d3.js'></script>
+<link href="metricsgraphics.css" rel="stylesheet" type="text/css">
+<script type='text/javascript' src='metricsgraphics.js'></script>
+<script src="https://www.gstatic.com/firebasejs/7.17.2/firebase.js"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCMPbs-XBKLb_odiPtzXUY1rt5tV4x8Wbc&libraries=&v=weekly" defer></script>
+
+<div id="flight_selector"> 
+	<label for="flights"></label>
+	<select name="flights" id="flights" class="select-css">
+	</select>
+</div>
+
+<div  style="transform: translate(48%, 0%)">
+	<label class="switch">
+	  <input type="checkbox" id="all_tlm" onclick="autoclick()">
+	  <span class="slider round"></span>
+	</label>
+</div>
+
+<div id="radio_buttons">
+<table style="transform: translate(10%, 0%);width:90% ">
+  <tr>
+    <td><input type="checkbox" id="map_box" >Map</td>
+    <td><input type="checkbox" id="gear_up_box" >Gear Status</td>
+    <td><input type="checkbox" id="OAT_box" >Outside Air Temp</td>
+  </tr>
+  <tr>
+    <td><input type="checkbox" id="RPM_box" >RPM</td>
+    <td><input type="checkbox" id="CHTs_box" >CHTs</td>
+    <td><input type="checkbox" id="EGTs_box" >EGTs</td>
+  </tr>
+  <tr>
+    <td><input type="checkbox" id="fuel_flow_box" >Fuel Flow</td>
+    <td><input type="checkbox" id="manifold_pressure_box" >Manifold Pressure</td>
+    <td><input type="checkbox" id="oil_temp_box" >Oil Temp</td>
+  </tr>
+  <tr>
+    <td><input type="checkbox" id="oil_pressure_box" >Oil Pressure</td>
+    <td><input type="checkbox" id="fuel_pressure_box" >Fuel Pressure</td>
+    <td><input type="checkbox" id="t_cpu_box" >CPU Temp</td>
+  </tr>
+  <tr>
+    <td><input type="checkbox" id="fc_RSSI_box" >Modem RSSI</td>
+    <td><input type="checkbox" id="fc_bit_error_rate_box" >Modem Bit Error Rate</td>
+    <td><input type="checkbox" id="bus_voltage_box" >Bus Voltage</td>
+  </tr>
+  <tr>
+    <td><input type="checkbox" id="bus_current_box" >Bus Current</td>
+    <td><input type="checkbox" id="tach_time_box" >Tach Time</td>
+    <td><input type="checkbox" id="hobbs_time_box" >Hobbs Time</td>
+  </tr>
+  <tr>
+    <td><input type="checkbox" id="press_altitude_box" >Pressure Altitude</td>
+    <td><input type="checkbox" id="TAS_box" >True Airspeed</td>
+    <td><input type="checkbox" id="pitch_box" >Pitch</td>
+  </tr>
+  <tr>
+    <td><input type="checkbox" id="roll_box" >Roll</td>
+    <td><input type="checkbox" id="heading_box" >Heading</td>
+    <td><input type="checkbox" id="vertical_gs_box" >Vertical Gs</td>
+  </tr>
+  <tr>
+    <td><input type="checkbox" id="vertical_speed_box" >Vertical Speed</td>
+    <td><input type="checkbox" id="wind_speed_box" >Wind Speed</td>
+    <td><input type="checkbox" id="wind_direction_box" >Wind Direction</td>
+  </tr>
+
+</table>
+<p></p>
+</div>
+
+
+
+<button class="block" onclick="display_flight_telem()" id="tlm_button">Load Telemetry</button>
+
+<!-- <button class="block" onclick="download_csv_telem()" id="download_button" style="display:none">Download Data as CSV</button> -->
+
+
+<a href='' id='download_button' style="display:none"><button class="block">Download Data as CSV</button></a>
+
+</head>
+
+
+<body id="body">
+
+
+
+<div id="press_altitude"></div>
+<div id="gear_up"></div>
+<div id="TAS"></div>
+
+
+<div id="RPM"></div>
+<div id="CHTs"></div>
+<div id="EGTs"></div>
+<div id="fuel_flow"></div>
+<div id="manifold_pressure"></div>
+<div id="oil_temp"></div>
+<div id="oil_pressure"></div>
+<div id="fuel_pressure"></div>
+
+<div id="t_cpu"></div>
+<div id="fc_RSSI"></div>
+<div id="fc_bit_error_rate"></div>
+
+<div id="bus_voltage"></div>
+<div id="bus_current"></div>
+
+<div id="pitch"></div>
+<div id="roll"></div>
+<div id="heading"></div>
+<div id="vertical_gs"></div>
+<div id="vertical_speed"></div>
+
+<div id="wind_speed"></div>
+<div id="wind_direction"></div>
+<div id="OAT"></div>
+
+<div id="tach_time"></div>
+<div id="hobbs_time"></div>
+<div id="frame_index"></div>
+
+<div id="map"></div>
+
+
+  
+<script type="text/javascript">
+
+//data=[];
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCMPbs-XBKLb_odiPtzXUY1rt5tV4x8Wbc",
+  authDomain: "flightcomputer-2c62d.firebaseapp.com",
+  databaseURL: "https://flightcomputer-2c62d.firebaseio.com",
+  projectId: "flightcomputer-2c62d",
+  storageBucket: "flightcomputer-2c62d.appspot.com",
+  messagingSenderId: "1021900970009",
+  appId: "1:1021900970009:web:bf3ebcf138f040dd49f288",
+  measurementId: "G-PTPQ8QW8J5"
+};
+
+
+
+firebase.initializeApp(firebaseConfig);
+var database = firebase.database();
+var storage = firebase.storage();
+var storageRef = storage.ref();
+var flight_telem_ref=storageRef.child('flight_telem');
+
+function autoclick(){
+	console.log('check all clicked');
+	telem_ids={
+		gear_up:{checkbox:'gear_up_box',title:'Gear Up',target:'#gear_up',legend:'Gear',y_accessor:'gear_up',html_id: gear_up},
+		OAT:{checkbox:'OAT_box',title:'Outside Air Temp (F)',target:'#OAT',legend:'OAT',y_accessor:'OAT',html_id: OAT},
+		RPM:{checkbox:'RPM_box',title:'RPM',target:'#RPM',legend:'RPM',y_accessor:'RPM',html_id: RPM},
+		CHTs:{checkbox:'CHTs_box',title:'Cylinder Head Temps (F)',target:'#CHTs',legend:['CHT1','CHT2','CHT3','CHT4'],y_accessor:['CHT1','CHT2','CHT3','CHT4'],html_id: CHTs},
+		EGTs:{checkbox:'EGTs_box',title:'Exaust Gas Temps (F)',target:'#EGTs',legend:['EGT1','EGT2','EGT3','EGT4'],y_accessor:['EGT1','EGT2','EGT3','EGT4'],html_id: EGTs},
+		fuel_flow:{checkbox:'fuel_flow_box',title:'Fuel Flow (gph)',target:'#fuel_flow',legend:'fuel_flow',y_accessor:'fuel_flow',html_id: fuel_flow},
+		manifold_pressure:{checkbox:'manifold_pressure_box',title:'Manifold Pressure (psi)',target:'#manifold_pressure',legend:'manifold_pressure',y_accessor:'manifold_pressure',html_id: manifold_pressure},
+		oil_temp:{checkbox:'oil_temp_box',title:'Oil Temp (F)',target:'#oil_temp',legend:'oil_temp',y_accessor:'oil_temp',html_id: oil_temp},
+		oil_pressure:{checkbox:'oil_pressure_box',title:'Oil Pressure (psi)',target:'#oil_pressure',legend:'oil_pressure',y_accessor:'oil_pressure',html_id: oil_pressure},
+		fuel_pressure:{checkbox:'fuel_pressure_box',title:'Fuel Pressure (psi)',target:'#fuel_pressure',legend:'fuel_pressure',y_accessor:'fuel_pressure',html_id: fuel_pressure},
+		t_cpu:{checkbox:'t_cpu_box',title:'CPU Temp (F)',target:'#t_cpu',legend:'t_cpu',y_accessor:'t_cpu',html_id: t_cpu},
+		fc_RSSI:{checkbox:'fc_RSSI_box',title:'Modem RSSI',target:'#fc_RSSI',legend:'fc_RSSI',y_accessor:'fc_RSSI',html_id: fc_RSSI},
+		fc_bit_error_rate:{checkbox:'fc_bit_error_rate_box',title:'Modem Bit Error Rate Metric',target:'#fc_bit_error_rate',legend:'fc_bit_error_rate',y_accessor:'fc_bit_error_rate',html_id: fc_bit_error_rate},
+		bus_voltage:{checkbox:'bus_voltage_box',title:'Bus Voltage (V)',target:'#bus_voltage',legend:'bus_voltage',y_accessor:'bus_voltage',html_id: bus_voltage},
+		bus_current:{checkbox:'bus_current_box',title:'Bus Current (A)',target:'#bus_current',legend:'bus_current',y_accessor:'bus_current',html_id: bus_current},
+		tach_time:{checkbox:'tach_time_box',title:'Tach Time (h)',target:'#tach_time',legend:'tach_time',y_accessor:'tach_time',html_id: tach_time},
+		hobbs_time:{checkbox:'hobbs_time_box',title:'Hobbs Time (h)',target:'#hobbs_time',legend:'hobbs_time',y_accessor:'hobbs_time',html_id: hobbs_time},
+		press_altitude:{checkbox:'press_altitude_box',title:'Pressure Altitude (ft)',target:'#press_altitude',legend:'press_altitude',y_accessor:'press_altitude',html_id: press_altitude},
+		TAS:{checkbox:'TAS_box',title:'True Airspeed (kts)',target:'#TAS',legend:'TAS',y_accessor:'TAS',html_id: TAS},
+		pitch:{checkbox:'pitch_box',title:'Pitch (deg)',target:'#pitch',legend:'pitch',y_accessor:'pitch',html_id: pitch},
+		roll:{checkbox:'roll_box',title:'Roll (deg)',target:'#roll',legend:'roll',y_accessor:'roll',html_id: roll},
+		heading:{checkbox:'heading_box',title:'Magnetic Heading (deg)',target:'#heading',legend:'heading',y_accessor:'heading',html_id: heading},
+		vertical_gs:{checkbox:'vertical_gs_box',title:'Vertical Gs',target:'#vertical_gs',legend:'vertical_gs',y_accessor:'vertical_gs',html_id: vertical_gs},
+		vertical_speed:{checkbox:'vertical_speed_box',title:'Vertical Speed (ft/min)',target:'#vertical_speed',legend:'vertical_speed',y_accessor:'vertical_speed',html_id: vertical_speed},
+		wind_speed:{checkbox:'wind_speed_box',title:'Wind Speed (kts)',target:'#wind_speed',legend:'wind_speed',y_accessor:'wind_speed',html_id: wind_speed},
+		wind_direction:{checkbox:'wind_direction_box',title:'Wind Direction (deg magnetic)',target:'#wind_direction',legend:'wind_direction',y_accessor:'wind_direction',html_id: wind_direction},
+	};
+	telem_ids_keys=Object.keys(telem_ids);
+	if(document.getElementById('all_tlm').checked){
+		telem_ids_keys.forEach(function(telem_ids_key){
+			document.getElementById(telem_ids[telem_ids_key]['checkbox']).checked=true;
+		});
+		document.getElementById('map_box').checked=true
+	}else{
+		telem_ids_keys.forEach(function(telem_ids_key){
+			document.getElementById(telem_ids[telem_ids_key]['checkbox']).checked=false;
+		});
+		document.getElementById('map_box').checked=false
+	}
+}
+
+//get the list of telem_files from firebase storage and populate the user dropdown
+function list_of_flight_telem_files() {
+	flight_dropdown_html='<option value="'+''+'">'+'Select A Flight'+'</option>';
+	flight_file_names=[];
+	flight_telem_ref.listAll().then(function(res){
+		res.items.forEach(function(itemRef){
+			flight_file_name=itemRef.name;
+			flight_name=flight_file_name.substring(0,flight_file_name.length-4);
+			flight_file_names.push(flight_file_name);
+		});
+		flight_file_names.sort();
+		flight_file_names.reverse();
+		flight_file_names.forEach(function(flight_file_name){
+			flight_name=flight_file_name.substring(0,flight_file_name.length-4);
+			flight_dropdown_html=flight_dropdown_html+'<option value="'+flight_file_name+'">'+flight_name+'</option>';
+		});
+		flights.innerHTML=flight_dropdown_html;
+		return flight_file_names;
+	});
+}
+
+function get_map_cord_object(flight_data){
+	map_cord_object={start_lat:'',start_lon:'',end_lat:'',end_lon:'',map_cords:[],bounds:new google.maps.LatLngBounds()};
+	found_first_point=0;
+	flight_data.forEach(function(data_point){
+		if (String(data_point['lat']).length>2){
+			if (found_first_point==0){
+				found_first_point=1;
+				map_cord_object['start_lat']=data_point['lat'];
+				map_cord_object['start_lon']=data_point['lon'];
+			}
+			map_cord_object['end_lat']=data_point['lat'];
+			map_cord_object['end_lon']=data_point['lon'];
+			map_cord_object['map_cords'].push({lat:data_point['lat'],lng:data_point['lon']});
+			loc = new google.maps.LatLng(data_point['lat'], data_point['lon']);
+			map_cord_object['bounds'].extend(loc);
+		}
+	});
+	return map_cord_object;
+}
+
+function processData(csv) {
+	var allTextLines = csv.split(/\r\n|\n/);
+	flight_data=[];
+	
+	csv_header=allTextLines[0];
+	csv_columns=csv_header.split(',');
+	
+	for (var i=1; i<allTextLines.length-1;i++){
+		datapoint_object={};
+		var telem_row=allTextLines[i].split(',');	
+		for (var j=0; j<telem_row.length; j++){
+			if (telem_row[j].includes('TRUE')||telem_row[j]=='True'){
+				datapoint_object[csv_columns[j]]=1;
+			}else if (telem_row[j].includes('FALSE')||telem_row[j]=='False'){
+				datapoint_object[csv_columns[j]]=0;
+			}else{
+				datapoint_object[csv_columns[j]]=Number(telem_row[j]);
+			}
+			/// put in human readable time stamp
+			if (j==0){
+				date = new Date(telem_row[j]*1000)
+				datapoint_object['human_time']=date;
+				//console.log(date);
+			}
+		}
+		flight_data.push(datapoint_object);
+	}
+	return flight_data;
+
+}
+
+/*
+function download_csv_telem(){
+	flight_file_name=drop_down.options[drop_down.selectedIndex].value;
+	if (flight_file_name.length>1){
+		download_button.innerHTML='Downloading....'
+		flight_telem_ref.child(flight_file_name).getDownloadURL().then(function(url){
+			
+		}
+	}
+}
+*/
+
+var csv_download_url=''
+
+function display_flight_telem(){
+
+	//button changes to say loading.
+	
+
+	telem_ids={
+		gear_up:{checkbox:'gear_up_box',title:'Gear Up',target:'#gear_up',legend:'Gear',y_accessor:'gear_up',html_id: gear_up},
+		OAT:{checkbox:'OAT_box',title:'Outside Air Temp (F)',target:'#OAT',legend:'OAT',y_accessor:'OAT',html_id: OAT},
+		RPM:{checkbox:'RPM_box',title:'RPM',target:'#RPM',legend:'RPM',y_accessor:'RPM',html_id: RPM},
+		CHTs:{checkbox:'CHTs_box',title:'Cylinder Head Temps (F)',target:'#CHTs',legend:['CHT1','CHT2','CHT3','CHT4'],y_accessor:['CHT1','CHT2','CHT3','CHT4'],html_id: CHTs},
+		EGTs:{checkbox:'EGTs_box',title:'Exaust Gas Temps (F)',target:'#EGTs',legend:['EGT1','EGT2','EGT3','EGT4'],y_accessor:['EGT1','EGT2','EGT3','EGT4'],html_id: EGTs},
+		fuel_flow:{checkbox:'fuel_flow_box',title:'Fuel Flow (gph)',target:'#fuel_flow',legend:'fuel_flow',y_accessor:'fuel_flow',html_id: fuel_flow},
+		manifold_pressure:{checkbox:'manifold_pressure_box',title:'Manifold Pressure (psi)',target:'#manifold_pressure',legend:'manifold_pressure',y_accessor:'manifold_pressure',html_id: manifold_pressure},
+		oil_temp:{checkbox:'oil_temp_box',title:'Oil Temp (F)',target:'#oil_temp',legend:'oil_temp',y_accessor:'oil_temp',html_id: oil_temp},
+		oil_pressure:{checkbox:'oil_pressure_box',title:'Oil Pressure (psi)',target:'#oil_pressure',legend:'oil_pressure',y_accessor:'oil_pressure',html_id: oil_pressure},
+		fuel_pressure:{checkbox:'fuel_pressure_box',title:'Fuel Pressure (psi)',target:'#fuel_pressure',legend:'fuel_pressure',y_accessor:'fuel_pressure',html_id: fuel_pressure},
+		t_cpu:{checkbox:'t_cpu_box',title:'CPU Temp (F)',target:'#t_cpu',legend:'t_cpu',y_accessor:'t_cpu',html_id: t_cpu},
+		fc_RSSI:{checkbox:'fc_RSSI_box',title:'Modem RSSI',target:'#fc_RSSI',legend:'fc_RSSI',y_accessor:'fc_RSSI',html_id: fc_RSSI},
+		fc_bit_error_rate:{checkbox:'fc_bit_error_rate_box',title:'Modem Bit Error Rate Metric',target:'#fc_bit_error_rate',legend:'fc_bit_error_rate',y_accessor:'fc_bit_error_rate',html_id: fc_bit_error_rate},
+		bus_voltage:{checkbox:'bus_voltage_box',title:'Bus Voltage (V)',target:'#bus_voltage',legend:'bus_voltage',y_accessor:'bus_voltage',html_id: bus_voltage},
+		bus_current:{checkbox:'bus_current_box',title:'Bus Current (A)',target:'#bus_current',legend:'bus_current',y_accessor:'bus_current',html_id: bus_current},
+		tach_time:{checkbox:'tach_time_box',title:'Tach Time (h)',target:'#tach_time',legend:'tach_time',y_accessor:'tach_time',html_id: tach_time},
+		hobbs_time:{checkbox:'hobbs_time_box',title:'Hobbs Time (h)',target:'#hobbs_time',legend:'hobbs_time',y_accessor:'hobbs_time',html_id: hobbs_time},
+		press_altitude:{checkbox:'press_altitude_box',title:'Pressure Altitude (ft)',target:'#press_altitude',legend:'press_altitude',y_accessor:'press_altitude',html_id: press_altitude},
+		TAS:{checkbox:'TAS_box',title:'True Airspeed (kts)',target:'#TAS',legend:'TAS',y_accessor:'TAS',html_id: TAS},
+		pitch:{checkbox:'pitch_box',title:'Pitch (deg)',target:'#pitch',legend:'pitch',y_accessor:'pitch',html_id: pitch},
+		roll:{checkbox:'roll_box',title:'Roll (deg)',target:'#roll',legend:'roll',y_accessor:'roll',html_id: roll},
+		heading:{checkbox:'heading_box',title:'Magnetic Heading (deg)',target:'#heading',legend:'heading',y_accessor:'heading',html_id: heading},
+		vertical_gs:{checkbox:'vertical_gs_box',title:'Vertical Gs',target:'#vertical_gs',legend:'vertical_gs',y_accessor:'vertical_gs',html_id: vertical_gs},
+		vertical_speed:{checkbox:'vertical_speed_box',title:'Vertical Speed (ft/s)',target:'#vertical_speed',legend:'vertical_speed',y_accessor:'vertical_speed',html_id: vertical_speed},
+		wind_speed:{checkbox:'wind_speed_box',title:'Wind Speed (kts)',target:'#wind_speed',legend:'wind_speed',y_accessor:'wind_speed',html_id: wind_speed},
+		wind_direction:{checkbox:'wind_direction_box',title:'Wind Direction (deg magnetic)',target:'#wind_direction',legend:'wind_direction',y_accessor:'wind_direction',html_id: wind_direction},
+	};
+
+	
+
+	var drop_down = document.getElementById("flights");
+	flight_file_name=drop_down.options[drop_down.selectedIndex].value;
+	console.log(flight_file_name);
+	console.log(flight_file_name.length);
+	if (flight_file_name.length>1){
+		tlm_button.innerHTML='Loading....'
+		flight_telem_ref.child(flight_file_name).getDownloadURL().then(function(url){
+			csv_download_url=url;
+			var xhr = new XMLHttpRequest();
+			xhr.responseType = 'blob';
+			xhr.onload = function(event) {
+				var blob = xhr.response;
+				var reader = new FileReader();
+				reader.readAsText(blob);
+				reader.onload=function loadHandler(event){
+					var csv = event.target.result;
+					flight_data=processData(csv); 
+					console.log(flight_data);
+
+					telem_ids_keys=Object.keys(telem_ids);
+					telem_ids_keys.forEach(function(telem_ids_key){
+						if(document.getElementById(telem_ids[telem_ids_key]['checkbox']).checked){
+							MG.data_graphic({
+								title: telem_ids[telem_ids_key]['title'],
+								data: flight_data,
+								full_width:true,
+								min_y_from_data: true,
+								height:200,
+								//linked: true,
+								target: telem_ids[telem_ids_key]['target'],
+								x_accessor: 'human_time',
+								y_accessor: telem_ids[telem_ids_key]['y_accessor'],
+							});		
+						}else{
+							telem_ids[telem_ids_key]['html_id'].innerHTML='';
+						}
+					});
+/*
+					MG.data_graphic({
+						title: 'Frame Index',
+						data: flight_data,
+						full_width:true,
+						height:200,
+						//linked: true,
+						target: '#frame_index',
+						x_accessor: 'human_time',
+						y_accessor: 'frame_index',
+					});	
+*/				
+
+					if(document.getElementById('map_box').checked){
+						document.getElementById("map").style.display = "block";
+						map_cord_object=get_map_cord_object(flight_data);
+						var map = new google.maps.Map(document.getElementById("map"), {
+							center: {
+							  lat: map_cord_object['start_lat'],
+							  lng: map_cord_object['start_lon']
+							},
+							zoom: 8,
+							options: {
+								gestureHandling: 'greedy'
+							}
+						});
+						var flightPath = new google.maps.Polyline({
+							path: map_cord_object['map_cords'],
+							geodesic: true,
+							strokeColor: '#FF0000',
+							strokeOpacity: 1.0,
+							strokeWeight: 2
+						});
+						flightPath.setMap(map);
+						map.fitBounds(map_cord_object['bounds']);
+						map.panToBounds(map_cord_object['bounds']);
+					}else{
+						document.getElementById("map").style.display = "none";
+					}
+					tlm_button.innerHTML='Refresh Telemetry';
+					document.getElementById("download_button").style.display = "block";
+					document.getElementById("download_button").onclick = function(){
+						this.href=csv_download_url;
+						//document.getElementById('download_button').innerHTML = '<a href="' + csv_download_url + '">' + 'Download Data as CSV' + '</a>';
+						console.log(this.href);
+					};
+				}
+
+			};
+		xhr.open('GET', url);
+		xhr.send();	
+		});
+	}
+}
+
+my_flights=list_of_flight_telem_files();
+console.log(flight_file_names);
+
+/*
+firebase.database().ref('/telemetry/1597026187').once('value').then(function(snapshot){
+	my_data=snapshot.val();
+
+	for (const property in my_data){
+		
+		data_point={"time":property,"bus_current":my_data[property]["bus_current"]}
+		data.push(data_point)
+		
+	}
+	
+	MG.data_graphic({
+	title: "UFO Sightings",
+	data: data,
+	full_width:true,
+	height: 650,
+	target: '#chart',
+	x_accessor: 'time',
+	y_accessor: 'bus_current',
+	});
+	
+	console.log(data)
+
+});
+
+*/
+/*
+storageRef.child('03-Jul-2020_10_17_29.csv').getDownloadURL().then(function(url) {
+  var xhr = new XMLHttpRequest();
+  xhr.responseType = 'blob';
+  xhr.onload = function(event) {
+    var blob = xhr.response;
+	console.log(blob);
+	chts.innerHTML=blob;
+	var reader = new FileReader();
+	reader.readAsText(blob);
+	reader.onload=function loadHandler(event){
+		var csv = event.target.result;
+		console.log(csv);
+	}
+  };
+  xhr.open('GET', url);
+  xhr.send();
+  
+  
+
+}).catch(function(error) {
+  console.log(error);
+});
+*/
+
+
+
+</script>
+</body>
+</html>

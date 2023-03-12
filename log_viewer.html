@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Flight Log Viewer</title>
+    <style>
+      /* Add any CSS styling here */
+      body {
+        background-image: url("./plane_pic.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+      table {
+        border-collapse: collapse;
+        margin: 20px;
+      }
+      th, td {
+        border: 1px solid black;
+        padding: 10px;
+        text-align: left;
+      }
+      th {
+        background-color: lightgray;
+      }
+    </style>
+    <script src="https://www.gstatic.com/firebasejs/7.17.2/firebase.js"></script>
+  </head>
+  <body>
+    <!-- Add your website content here -->
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Download</th>
+        </tr>
+      </thead>
+      <tbody id="file-list">
+      </tbody>
+    </table>
+    <script type="text/javascript">
+      const firebaseConfig = {
+        apiKey: "AIzaSyCMPbs-XBKLb_odiPtzXUY1rt5tV4x8Wbc",
+        authDomain: "flightcomputer-2c62d.firebaseapp.com",
+        databaseURL: "https://flightcomputer-2c62d.firebaseio.com",
+        projectId: "flightcomputer-2c62d",
+        storageBucket: "flightcomputer-2c62d.appspot.com",
+        messagingSenderId: "1021900970009",
+        appId: "1:1021900970009:web:bf3ebcf138f040dd49f288",
+        measurementId: "G-PTPQ8QW8J5"
+      };
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+
+      // Get a reference to the storage service
+      var storage = firebase.storage();
+      var storageRef = storage.ref();
+      var flight_telem_ref = storageRef.child('flight_telem');
+
+      // Get a list of all files in the flight_telem folder
+      flight_telem_ref.listAll().then(function(result) {
+        var fileList = document.getElementById('file-list');
+        result.items.forEach(function(itemRef) {
+          // For each file, create a new row in the table and add the file name and a download link
+          var name = itemRef.name;
+          var row = document.createElement('tr');
+          var nameCell = document.createElement('td');
+          var linkCell = document.createElement('td');
+          var link = document.createElement('a');
+          link.href = '#';
+          link.innerHTML = 'Download';
+          link.addEventListener('click', function() {
+            // When the download link is clicked, download the file
+            itemRef.getDownloadURL().then(function(url) {
+              window.open(url);
+            });
+          });
+          nameCell.innerHTML = name;
+          linkCell.appendChild(link);
+          row.appendChild(nameCell);
+          row.appendChild(linkCell);
+          fileList.appendChild(row);
+        });
+      }).catch(function(error) {
+        console.log(error);
+      });
+    </script>
+  </body>
+</html>
+s
