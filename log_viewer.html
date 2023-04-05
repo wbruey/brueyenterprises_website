@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>Flight Log Viewer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
       /* Add any CSS styling here */
       body {
@@ -9,33 +10,44 @@
         background-repeat: no-repeat;
         background-size: cover;
       }
-      table {
-        border-collapse: collapse;
-        margin: 20px;
+
+      #dropdown-container {
+        text-align: center;
+        margin-top: 50px;
       }
-      th, td {
-        border: 1px solid black;
+
+      #dropdown {
+        font-size: 1.2em;
         padding: 10px;
-        text-align: left;
+        border: 2px solid blue;
+        width: 90%;
+        max-width: 500px;
+        margin-bottom: 20px;
       }
-      th {
-        background-color: lightgray;
-      }
+
+	#log-display {
+	  font-family: monospace;
+	  font-size: .75em; /* change this to the desired font size */
+	  width: 90%;
+	  height: 100vh;
+	  margin: 0 auto;
+	  padding: 20px;
+	  overflow-y: scroll;
+	  background-color: white;
+	  border: 2px solid blue;
+	}
     </style>
     <script src="https://www.gstatic.com/firebasejs/7.17.2/firebase.js"></script>
   </head>
   <body>
     <!-- Add your website content here -->
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Download</th>
-        </tr>
-      </thead>
-      <tbody id="file-list">
-      </tbody>
-    </table>
+    <div id="dropdown-container">
+      <select id="dropdown"></select>
+      <br>
+      <textarea id="log-display"></textarea>
+    </div>
+	
+	
     <script type="text/javascript">
       const firebaseConfig = {
         apiKey: "AIzaSyCMPbs-XBKLb_odiPtzXUY1rt5tV4x8Wbc",
@@ -48,42 +60,50 @@
         measurementId: "G-PTPQ8QW8J5"
       };
 
-      // Initialize Firebase
       firebase.initializeApp(firebaseConfig);
-
-      // Get a reference to the storage service
+      var database = firebase.database();
       var storage = firebase.storage();
       var storageRef = storage.ref();
-      var flight_telem_ref = storageRef.child('flight_telem');
+      var flight_telem_ref = storageRef.child("logs");
 
-      // Get a list of all files in the flight_telem folder
-      flight_telem_ref.listAll().then(function(result) {
-        var fileList = document.getElementById('file-list');
-        result.items.forEach(function(itemRef) {
-          // For each file, create a new row in the table and add the file name and a download link
-          var name = itemRef.name;
-          var row = document.createElement('tr');
-          var nameCell = document.createElement('td');
-          var linkCell = document.createElement('td');
-          var link = document.createElement('a');
-          link.href = '#';
-          link.innerHTML = 'Download';
-          link.addEventListener('click', function() {
-            // When the download link is clicked, download the file
-            itemRef.getDownloadURL().then(function(url) {
-              window.open(url);
-            });
+      var dropdown = document.getElementById("dropdown");
+      dropdown.length = 0;
+
+      var defaultOption = document.createElement("option");
+      defaultOption.text = "Select a log file";
+
+      dropdown.add(defaultOption);
+      dropdown.selectedIndex = 0;
+
+		flight_telem_ref.listAll().then(function (res) {
+		  res.items.reverse().forEach(function (item) {
+			var option = document.createElement("option");
+			option.text = item.name;
+			option.value = item.name;
+			dropdown.add(option);
+		  });
+		});
+
+
+      dropdown.addEventListener("change", function () {
+        var logName = dropdown.value;
+        if (logName !== "Select a log file") {
+          var logRef = storageRef.child("logs/" + logName);
+          logRef.getDownloadURL().then(function (url) {
+            fetch(url)
+              .then(function (response) {
+                return response.text();
+              })
+              .then(function (text) {
+                var logDisplay = document.getElementById("log-display");
+                logDisplay.value = text;
+              });
           });
-          nameCell.innerHTML = name;
-          linkCell.appendChild(link);
-          row.appendChild(nameCell);
-          row.appendChild(linkCell);
-          fileList.appendChild(row);
-        });
-      }).catch(function(error) {
-        console.log(error);
+        } else {
+          var logDisplay = document.getElementById("log-display");
+          logDisplay.value = "";
+        }
       });
     </script>
   </body>
-</html>
-s
+</

@@ -179,15 +179,17 @@ input:checked + .slider:before {
     <td><input type="checkbox" id="fuel_pressure_box" >Fuel Pressure</td>
     <td><input type="checkbox" id="t_cpu_box" >CPU Temp</td>
   </tr>
-  <tr>
+<!--   <tr>
     <td><input type="checkbox" id="fc_RSSI_box" >Modem RSSI</td>
     <td><input type="checkbox" id="fc_bit_error_rate_box" >Modem Bit Error Rate</td>
-    <td><input type="checkbox" id="bus_voltage_box" >Bus Voltage</td>
-  </tr>
+	<td><input type="checkbox" id="tach_time_box" >Tach Time</td>
+    <td><input type="checkbox" id="hobbs_time_box" >Hobbs Time</td>
+
+  </tr> -->
   <tr>
     <td><input type="checkbox" id="bus_current_box" >Bus Current</td>
-    <td><input type="checkbox" id="tach_time_box" >Tach Time</td>
-    <td><input type="checkbox" id="hobbs_time_box" >Hobbs Time</td>
+	<td><input type="checkbox" id="bus_voltage_box" >Bus Voltage</td>
+
   </tr>
   <tr>
     <td><input type="checkbox" id="press_altitude_box" >Pressure Altitude</td>
@@ -229,6 +231,7 @@ input:checked + .slider:before {
 <div id="gear_up"></div>
 <div id="TAS"></div>
 
+<div id="map"></div>
 
 <div id="RPM"></div>
 <div id="CHTs"></div>
@@ -240,8 +243,8 @@ input:checked + .slider:before {
 <div id="fuel_pressure"></div>
 
 <div id="t_cpu"></div>
-<div id="fc_RSSI"></div>
-<div id="fc_bit_error_rate"></div>
+<!-- <div id="fc_RSSI"></div> -->
+<!-- <div id="fc_bit_error_rate"></div> -->
 
 <div id="bus_voltage"></div>
 <div id="bus_current"></div>
@@ -256,11 +259,11 @@ input:checked + .slider:before {
 <div id="wind_direction"></div>
 <div id="OAT"></div>
 
-<div id="tach_time"></div>
-<div id="hobbs_time"></div>
+<!-- <div id="tach_time"></div> -->
+<!-- <div id="hobbs_time"></div> -->
 <div id="frame_index"></div>
 
-<div id="map"></div>
+
 
 
   
@@ -301,12 +304,12 @@ function autoclick(){
 		oil_pressure:{checkbox:'oil_pressure_box',title:'Oil Pressure (psi)',target:'#oil_pressure',legend:'oil_pressure',y_accessor:'oil_pressure',html_id: oil_pressure},
 		fuel_pressure:{checkbox:'fuel_pressure_box',title:'Fuel Pressure (psi)',target:'#fuel_pressure',legend:'fuel_pressure',y_accessor:'fuel_pressure',html_id: fuel_pressure},
 		t_cpu:{checkbox:'t_cpu_box',title:'CPU Temp (F)',target:'#t_cpu',legend:'t_cpu',y_accessor:'t_cpu',html_id: t_cpu},
-		fc_RSSI:{checkbox:'fc_RSSI_box',title:'Modem RSSI',target:'#fc_RSSI',legend:'fc_RSSI',y_accessor:'fc_RSSI',html_id: fc_RSSI},
-		fc_bit_error_rate:{checkbox:'fc_bit_error_rate_box',title:'Modem Bit Error Rate Metric',target:'#fc_bit_error_rate',legend:'fc_bit_error_rate',y_accessor:'fc_bit_error_rate',html_id: fc_bit_error_rate},
+		//fc_RSSI:{checkbox:'fc_RSSI_box',title:'Modem RSSI',target:'#fc_RSSI',legend:'fc_RSSI',y_accessor:'fc_RSSI',html_id: fc_RSSI},
+		//fc_bit_error_rate:{checkbox:'fc_bit_error_rate_box',title:'Modem Bit Error Rate Metric',target:'#fc_bit_error_rate',legend:'fc_bit_error_rate',y_accessor:'fc_bit_error_rate',html_id: fc_bit_error_rate},
 		bus_voltage:{checkbox:'bus_voltage_box',title:'Bus Voltage (V)',target:'#bus_voltage',legend:'bus_voltage',y_accessor:'bus_voltage',html_id: bus_voltage},
 		bus_current:{checkbox:'bus_current_box',title:'Bus Current (A)',target:'#bus_current',legend:'bus_current',y_accessor:'bus_current',html_id: bus_current},
-		tach_time:{checkbox:'tach_time_box',title:'Tach Time (h)',target:'#tach_time',legend:'tach_time',y_accessor:'tach_time',html_id: tach_time},
-		hobbs_time:{checkbox:'hobbs_time_box',title:'Hobbs Time (h)',target:'#hobbs_time',legend:'hobbs_time',y_accessor:'hobbs_time',html_id: hobbs_time},
+		//tach_time:{checkbox:'tach_time_box',title:'Tach Time (h)',target:'#tach_time',legend:'tach_time',y_accessor:'tach_time',html_id: tach_time},
+		//hobbs_time:{checkbox:'hobbs_time_box',title:'Hobbs Time (h)',target:'#hobbs_time',legend:'hobbs_time',y_accessor:'hobbs_time',html_id: hobbs_time},
 		press_altitude:{checkbox:'press_altitude_box',title:'Pressure Altitude (ft)',target:'#press_altitude',legend:'press_altitude',y_accessor:'press_altitude',html_id: press_altitude},
 		TAS:{checkbox:'TAS_box',title:'True Airspeed (kts)',target:'#TAS',legend:'TAS',y_accessor:'TAS',html_id: TAS},
 		pitch:{checkbox:'pitch_box',title:'Pitch (deg)',target:'#pitch',legend:'pitch',y_accessor:'pitch',html_id: pitch},
@@ -434,12 +437,12 @@ function display_flight_telem(){
 		oil_pressure:{checkbox:'oil_pressure_box',title:'Oil Pressure (psi)',target:'#oil_pressure',legend:'oil_pressure',y_accessor:'oil_pressure',html_id: oil_pressure},
 		fuel_pressure:{checkbox:'fuel_pressure_box',title:'Fuel Pressure (psi)',target:'#fuel_pressure',legend:'fuel_pressure',y_accessor:'fuel_pressure',html_id: fuel_pressure},
 		t_cpu:{checkbox:'t_cpu_box',title:'CPU Temp (F)',target:'#t_cpu',legend:'t_cpu',y_accessor:'t_cpu',html_id: t_cpu},
-		fc_RSSI:{checkbox:'fc_RSSI_box',title:'Modem RSSI',target:'#fc_RSSI',legend:'fc_RSSI',y_accessor:'fc_RSSI',html_id: fc_RSSI},
-		fc_bit_error_rate:{checkbox:'fc_bit_error_rate_box',title:'Modem Bit Error Rate Metric',target:'#fc_bit_error_rate',legend:'fc_bit_error_rate',y_accessor:'fc_bit_error_rate',html_id: fc_bit_error_rate},
+		//fc_RSSI:{checkbox:'fc_RSSI_box',title:'Modem RSSI',target:'#fc_RSSI',legend:'fc_RSSI',y_accessor:'fc_RSSI',html_id: fc_RSSI},
+		//fc_bit_error_rate:{checkbox:'fc_bit_error_rate_box',title:'Modem Bit Error Rate Metric',target:'#fc_bit_error_rate',legend:'fc_bit_error_rate',y_accessor:'fc_bit_error_rate',html_id: fc_bit_error_rate},
 		bus_voltage:{checkbox:'bus_voltage_box',title:'Bus Voltage (V)',target:'#bus_voltage',legend:'bus_voltage',y_accessor:'bus_voltage',html_id: bus_voltage},
 		bus_current:{checkbox:'bus_current_box',title:'Bus Current (A)',target:'#bus_current',legend:'bus_current',y_accessor:'bus_current',html_id: bus_current},
-		tach_time:{checkbox:'tach_time_box',title:'Tach Time (h)',target:'#tach_time',legend:'tach_time',y_accessor:'tach_time',html_id: tach_time},
-		hobbs_time:{checkbox:'hobbs_time_box',title:'Hobbs Time (h)',target:'#hobbs_time',legend:'hobbs_time',y_accessor:'hobbs_time',html_id: hobbs_time},
+		//tach_time:{checkbox:'tach_time_box',title:'Tach Time (h)',target:'#tach_time',legend:'tach_time',y_accessor:'tach_time',html_id: tach_time},
+		//hobbs_time:{checkbox:'hobbs_time_box',title:'Hobbs Time (h)',target:'#hobbs_time',legend:'hobbs_time',y_accessor:'hobbs_time',html_id: hobbs_time},
 		press_altitude:{checkbox:'press_altitude_box',title:'Pressure Altitude (ft)',target:'#press_altitude',legend:'press_altitude',y_accessor:'press_altitude',html_id: press_altitude},
 		TAS:{checkbox:'TAS_box',title:'True Airspeed (kts)',target:'#TAS',legend:'TAS',y_accessor:'TAS',html_id: TAS},
 		pitch:{checkbox:'pitch_box',title:'Pitch (deg)',target:'#pitch',legend:'pitch',y_accessor:'pitch',html_id: pitch},
