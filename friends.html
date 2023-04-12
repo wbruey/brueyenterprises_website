@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Friends - Manage Phone Numbers</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>Manage Friends' Phone Numbers</h1>
+        <form id="phoneForm">
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="name" required>
+            </div>
+            <div class="mb-3">
+                <label for="phoneNumber" class="form-label">Phone Number</label>
+                <input type="tel" class="form-control" id="phoneNumber" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+        <hr>
+        <h2>Current Phone Numbers</h2>
+        <table class="table" id="phoneNumbersTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Phone Number</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+  <script src="https://www.gstatic.com/firebasejs/7.17.2/firebase.js"></script>
+    <script>
+// Initialize Firebase
+var config = {
+  apiKey: "AIzaSyAi9aZghTwd67Kimq3MztjXhxg2koxLONo",
+  authDomain: "brutest2-62192.firebaseapp.com",
+  databaseURL: "https://brutest2-62192.firebaseio.com",
+  projectId: "brutest2-62192",
+  storageBucket: "brutest2-62192.appspot.com",
+  messagingSenderId: "195038075600",
+  appId: "1:195038075600:web:e43c46f27a7ac38ddc1cd5"
+};
+firebase.initializeApp(config);
+
+var database = firebase.database();
+var friendRef = database.ref('friends');
+
+// Update the phone number of an existing friend
+function updateFriend(name, phoneNumber) {
+  friendRef.child(name).set(phoneNumber);
+}
+
+// Delete a friend
+function deleteFriend(name) {
+  friendRef.child(name).remove();
+}
+
+// Add a new friend
+function addFriend(name, phoneNumber) {
+  friendRef.child(name).set(phoneNumber);
+}
+
+// Get a snapshot of the friend data and populate the friends table
+function populateTable(snapshot) {
+  var friendsTable = document.getElementById("phoneNumbersTable");
+  friendsTable.innerHTML = "<tr><th>Name</th><th>Phone Number</th><th>Edit</th><th>Delete</th></tr>";
+
+  snapshot.forEach(function(childSnapshot) {
+    var friendName = childSnapshot.key;
+    var phoneNumber = childSnapshot.val();
+
+    var row = document.createElement("tr");
+
+    var nameCell = document.createElement("td");
+    nameCell.innerHTML = friendName;
+    row.appendChild(nameCell);
+
+    var phoneCell = document.createElement("td");
+    phoneCell.innerHTML = phoneNumber;
+    row.appendChild(phoneCell);
+
+    var editCell = document.createElement("td");
+    var editButton = document.createElement("button");
+    editButton.innerHTML = "Edit";
+    editButton.addEventListener("click", function() {
+      var newPhone = prompt("Enter new phone number:", phoneNumber);
+      if (newPhone != null) {
+        updateFriend(friendName, newPhone);
+      }
+    });
+    editCell.appendChild(editButton);
+    row.appendChild(editCell);
+
+    var deleteCell = document.createElement("td");
+    var deleteButton = document.createElement("button");
+    deleteButton.innerHTML = "Delete";
+    deleteButton.addEventListener("click", function() {
+      if (confirm("Are you sure you want to delete this friend?")) {
+        deleteFriend(friendName);
+      }
+    });
+    deleteCell.appendChild(deleteButton);
+    row.appendChild(deleteCell);
+
+    friendsTable.appendChild(row);
+  });
+}
+
+// Listen for changes to the friend data and update the friends table
+friendRef.on("value", function(snapshot) {
+  populateTable(snapshot);
+});
+
+// Add a new friend when the form is submitted
+document.getElementById("phoneForm").addEventListener("submit", function(event) {
+  event.preventDefault();
+  var name = document.getElementById("name").value;
+  var phone = document.getElementById("phoneNumber").value;
+  addFriend(name, phone);
+  document.getElementById("phoneForm").reset();
+});
+
+
+    </script>
+    <script src="friends.js"></script>
+</body>
+</html>
