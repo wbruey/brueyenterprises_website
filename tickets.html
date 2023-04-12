@@ -1,0 +1,225 @@
+<!-- Set up the webpage HTML. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stop and Fix it Day!</title>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+    <!-- Set up the webpage CSS. -->
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+    }
+    h1 {
+        font-size: 36px;
+        margin-bottom: 10px;
+    }
+    h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+    #header {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 30px;
+    }
+    .graph {
+        width: 100%;
+        height: 300px;
+        margin-bottom: 20px;
+    }
+	canvas {
+	  display: block;
+	  padding: 0;
+	  margin: 0;
+	}
+</style>
+
+
+</head>
+
+<body>
+<!-- Display a title for the web page that says "Stop and Fix it Day!" along with today's date and time. -->
+<h1>Stop and Fix it Day!</h1>
+<h2 id="datetime"></h2>
+
+<!-- Below the title, header should display four numbers: the count of risk tickets left (and the delta from 24 hours ago) and the count of issue tickets left (and the delta from 24 hours ago). -->
+<div id="header">
+    <div id="riskCount"></div>
+    <div id="issueCount"></div>
+</div>
+
+<!-- Below the header should be two time series graphs one below the other. The top graph should have issue tickets as a function of time, and the 2nd graph (below the first) should have the risk tickets as a function of time. -->
+<div class="graph">
+    <canvas id="issueGraph"></canvas>
+</div>
+<div class="graph">
+    <canvas id="riskGraph"></canvas>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-database.js"></script>
+
+	
+	
+
+
+<script>
+// the data necessary for the webpage above can be pulled from a firebase realtime database.
+
+var config = {
+  apiKey: "AIzaSyAi9aZghTwd67Kimq3MztjXhxg2koxLONo",
+  authDomain: "brutest2-62192.firebaseapp.com",
+  databaseURL: "https://brutest2-62192.firebaseio.com",
+  projectId: "brutest2-62192",
+  storageBucket: "brutest2-62192.appspot.com",
+  messagingSenderId: "195038075600",
+  appId: "1:195038075600:web:e43c46f27a7ac38ddc1cd5"
+};
+firebase.initializeApp(config);
+
+// here is a comment that shows the json tree scheme that this javascript is expecting to see in the real time database
+/*
+{
+    "tickets": {
+        "risk": {
+            "total": 0,
+            "delta": 0
+        },
+        "issue": {
+            "total": 0,
+            "delta": 0
+        }
+    },
+    "graphs": {
+        "risk": [
+            { "timestamp": "2023-04-12T12:00:00Z", "count": 10 },
+            ...
+        ],
+        "issue": [
+            { "timestamp": "2023-04-12T12:00:00Z", "count": 5 },
+            ...
+        ]
+    }
+}
+*/
+
+// pull the data from the realtime database for risk and issue ticket data for populating the web page.
+function fetchData() {
+  firebase.database().ref('ticket_burn_down/tickets').once('value', snapshot => {
+    let tickets = snapshot.val();
+    updateTicketCounts(tickets);
+  });
+
+  firebase.database().ref('ticket_burn_down/graphs').once('value', snapshot => {
+    let graphsSnapshot = snapshot.val();
+    let formattedGraphs = {
+      risk: [],
+      issue: []
+    };
+    
+    for (const type in graphsSnapshot) {
+      for (const timestamp in graphsSnapshot[type]) {
+        formattedGraphs[type].push({ timestamp: timestamp, count: graphsSnapshot[type][timestamp] });
+      }
+    }
+
+    drawGraphs(formattedGraphs);
+  });
+}
+
+// populate the web page with the data pulled from the realtime database.
+function updateTicketCounts(tickets) {
+  document.getElementById('riskCount').innerText = `Risk tickets: ${tickets.risk.total} (${tickets.risk.delta >= 0 ? '+' : ''}${tickets.risk.delta})`;
+  document.getElementById('issueCount').innerText = `Issue tickets: ${tickets.issue.total} (${tickets.issue.delta >= 0 ? '+' : ''}${tickets.issue.delta})`;
+}
+
+// listen for changes to the database to update the web page in real time.
+firebase.database().ref('ticket_burn_down/tickets').on('value', snapshot => {
+  let tickets = snapshot.val();
+  updateTicketCounts(tickets);
+});
+
+firebase.database().ref('ticket_burn_down/graphs').on('value', snapshot => {
+  let graphs = snapshot.val();
+  drawGraphs(graphs);
+});
+
+// Update date and time
+function updateDateTime() {
+  let now = new Date();
+  document.getElementById('datetime').innerText = now.toLocaleString();
+}
+updateDateTime();
+setInterval(updateDateTime, 1000);
+
+// Fetch initial data and populate the webpage
+fetchData();
+
+function drawGraphs(graphs) {
+  if (!graphs.hasOwnProperty('issue') || !graphs.hasOwnProperty('risk') || !Array.isArray(graphs.issue) || !Array.isArray(graphs.risk)) {
+    return;
+  }
+
+  let issueChartData = graphs.issue.map(entry => {
+    return { x: new Date(entry.timestamp), y: entry.count };
+  });
+
+  let riskChartData = graphs.risk.map(entry => {
+    return { x: new Date(entry.timestamp), y: entry.count };
+  });
+
+  createLineChart('issueGraph', 'Issue Tickets', issueChartData);
+  createLineChart('riskGraph', 'Risk Tickets', riskChartData);
+}
+
+
+function createLineChart(elementId, label, chartData) {
+  const config = {
+    type: 'line',
+    data: {
+      datasets: [
+        {
+          label: label,
+          data: chartData,
+          borderColor: label === 'Issue Tickets' ? 'rgba(75, 192, 192, 1)' : 'rgba(255, 99, 132, 1)',
+          tension: 0.1
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: {
+          type: 'time',
+          adapters: {
+            date: {
+              library: 'date-fns',
+            },
+          },
+          time: {
+            unit: 'day',
+          },
+        },
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  };
+
+  let canvas = document.getElementById(elementId);
+  canvas.width = window.innerWidth;  // Set canvas width to viewport width
+  canvas.height = 300;
+  new Chart(canvas, config);
+}
+
+	
+	
+</script>	
