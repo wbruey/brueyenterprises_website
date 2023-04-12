@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Update Tickets</title>
+  <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-database.js"></script>
+</head>
+<body>
+  <h1>Update Tickets</h1>
+
+  <label for="risk-count-input">Risk Ticket Count:</label>
+  <input type="number" id="risk-count-input">
+  <button id="risk-count-button">Update Risk Count</button>
+
+  <label for="issue-count-input">Issue Ticket Count:</label>
+  <input type="number" id="issue-count-input">
+  <button id="issue-count-button">Update Issue Count</button>
+
+
+  <script>
+var config = {
+  apiKey: "AIzaSyAi9aZghTwd67Kimq3MztjXhxg2koxLONo",
+  authDomain: "brutest2-62192.firebaseapp.com",
+  databaseURL: "https://brutest2-62192.firebaseio.com",
+  projectId: "brutest2-62192",
+  storageBucket: "brutest2-62192.appspot.com",
+  messagingSenderId: "195038075600",
+  appId: "1:195038075600:web:e43c46f27a7ac38ddc1cd5"
+};
+   firebase.initializeApp(config);
+	const riskCountInput = document.getElementById('risk-count-input');
+	const issueCountInput = document.getElementById('issue-count-input');
+	const riskCountButton = document.getElementById('risk-count-button');
+	const issueCountButton = document.getElementById('issue-count-button');
+
+	riskCountButton.addEventListener('click', () => {
+	  const newRiskCount = Number(riskCountInput.value);
+	  updateTicketCount('risk', newRiskCount);
+	});
+
+	issueCountButton.addEventListener('click', () => {
+	  const newIssueCount = Number(issueCountInput.value);
+	  updateTicketCount('issue', newIssueCount);
+	});
+
+	function updateTicketCount(ticketType, ticketCount) {
+	  let ticketCountRef = firebase.database().ref(`ticket_burn_down/tickets/${ticketType}`);
+	let newTimestamp = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
+	newTimestamp = new Date(newTimestamp).toISOString().slice(0, -5) + '-07:00';
+
+	  console.log(`New timestamp: ${newTimestamp}`);
+	  let deltaRef = ticketCountRef.child('delta');
+
+	  ticketCountRef.once('value', snapshot => {
+		let currentCount = snapshot.val().total;
+		deltaRef.set(ticketCount - currentCount);
+		ticketCountRef.update({
+		  total: ticketCount
+		});
+	  });
+
+	  firebase.database().ref(`ticket_burn_down/graphs/${ticketType}`).update({
+		[newTimestamp]: ticketCount
+	  });
+	  
+	}
+
+  </script>
+</body>
+</html>
