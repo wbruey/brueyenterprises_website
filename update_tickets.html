@@ -45,27 +45,46 @@ var config = {
 	  updateTicketCount('issue', newIssueCount);
 	});
 
-	function updateTicketCount(ticketType, ticketCount) {
-	  let ticketCountRef = firebase.database().ref(`ticket_burn_down/tickets/${ticketType}`);
-	let newTimestamp = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
-	newTimestamp = new Date(newTimestamp).toISOString().slice(0, -5) + '-07:00';
+function getPacificTimestamp() {
+  const now = new Date();
+  const options = {
+    timeZone: 'America/Los_Angeles',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false // Add this line to use 24-hour format
+  };	
+  const formattedDate = now.toLocaleString('en-US', options);
+  const pacificDateObj = new Date(formattedDate);
+  const pacificTimestamp = `${pacificDateObj.getFullYear()}-${String(pacificDateObj.getMonth() + 1).padStart(2, '0')}-${String(pacificDateObj.getDate()).padStart(2, '0')}T${String(pacificDateObj.getHours()).padStart(2, '0')}:${String(pacificDateObj.getMinutes()).padStart(2, '0')}:${String(pacificDateObj.getSeconds()).padStart(2, '0')}-07:00`;
 
-	  console.log(`New timestamp: ${newTimestamp}`);
-	  let deltaRef = ticketCountRef.child('delta');
+  return pacificTimestamp;
+  
+}
+  
+function updateTicketCount(ticketType, ticketCount) {
+  let ticketCountRef = firebase.database().ref(`ticket_burn_down/tickets/${ticketType}`);
 
-	  ticketCountRef.once('value', snapshot => {
-		let currentCount = snapshot.val().total;
-		deltaRef.set(ticketCount - currentCount);
-		ticketCountRef.update({
-		  total: ticketCount
-		});
-	  });
+  const newTimestamp = getPacificTimestamp();
 
-	  firebase.database().ref(`ticket_burn_down/graphs/${ticketType}`).update({
-		[newTimestamp]: ticketCount
-	  });
-	  
-	}
+  console.log(`New timestamp: ${newTimestamp}`);
+  let deltaRef = ticketCountRef.child('delta');
+
+  ticketCountRef.once('value', snapshot => {
+    let currentCount = snapshot.val().total;
+    deltaRef.set(ticketCount - currentCount);
+    ticketCountRef.update({
+      total: ticketCount
+    });
+  });
+
+  firebase.database().ref(`ticket_burn_down/graphs/${ticketType}`).update({
+    [newTimestamp]: ticketCount
+  });
+}
 
   </script>
 </body>

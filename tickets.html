@@ -198,13 +198,19 @@ function createLineChart(elementId, label, chartData) {
       scales: {
         x: {
           type: 'time',
+          min: new Date(Date.now() - 24 * 60 * 60 * 1000 /8), // Last 24 hours
+          max: new Date(),
           adapters: {
             date: {
               library: 'date-fns',
             },
           },
           time: {
-            unit: 'day',
+            unit: 'hour',
+            displayFormats: {
+              hour: 'HH:mm'
+            },
+            tooltipFormat: 'yyyy-MM-dd HH:mm'
           },
         },
         y: {
@@ -219,7 +225,6 @@ function createLineChart(elementId, label, chartData) {
   canvas.height = 300;
   new Chart(canvas, config);
 }
-
 	
 	
 </script>	
