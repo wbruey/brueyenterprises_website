@@ -198,7 +198,7 @@ function createLineChart(elementId, label, chartData) {
       scales: {
         x: {
           type: 'time',
-          min: new Date(Date.now() - 24 * 60 * 60 * 1000 /8), // Last 24 hours
+          min: new Date(Date.now() - 24 * 60 * 60 * 1000 * 2 ), // Last 24 hours
           max: new Date(),
           adapters: {
             date: {
